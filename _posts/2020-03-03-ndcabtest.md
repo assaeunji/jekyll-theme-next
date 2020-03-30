@@ -15,7 +15,7 @@ comments: true
 
 ## **PUBG: 그치만 이렇게 하지 않으면 A/B 테스트 시켜주지 않는걸**
 
-![](../images/pubg-1.png)
+![](../../images/pubg-1.png)
 
 * 강연자: 이현섭
 * 링크: [NDC 2019 Replay 이현섭님 발표](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0012.html#c=NDC2019&t%5B%5D=%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D)
@@ -45,7 +45,7 @@ comments: true
   * Firebase (웹/ 모바일 클라이언트 로그 수집) - Google Analytics - Google BigQuery
 * 따라서 구글에서 쓰는 schema를 따라했음
 
-![](../images/pubg-2.png)
+![](../../images/pubg-2.png)
 
 ---
 
@@ -79,22 +79,22 @@ comments: true
 * 100만 동시 접속 $$\times$$ 매 초마다 로그 발생 $$\times$$ 평균 1kb 로그가 발생한다 가정했을 때 시간 당 **3.6TB**의 로그가 쌓임 
 * 이를 위해 **Scale-up** = 서버를 키운다! BUT 1TB는 무리 
 
-  ![](../images/pubg-3.png)
+  ![](../../images/pubg-3.png)
 
 * 어쨌든 **Scale-Out** = 서버를 늘린다! 
   * 작은 시스템을 여러 개 그려서 데이터 부하를 분산하는 방법
-  ![](../images/pubg-4.png)
+  ![](../../images/pubg-4.png)
 
 * 단순히 서버와 데이터 프로세싱을 Scale-out을 하는 건 다름: 데이터의 경우 어떤 부분에서 장애가 발생하고 장애가 발생한 부분에서 복구 과정을 해줘야함
 * 따라서, 데이터 **분산 처리**는 더 난이도 있음
 
 :deciduous_tree: **1과 2의 문제 해결하기: 실시간 스트리밍 + 분산 처리 = Apache Flink**
 
-![](../images/pubg-5.png)
+![](../../images/pubg-5.png)
 
 * Apache Flink를 한 마디로 요약하면, <mark style='background-color: #fff5b1'> 데이터 스트림을 위한 분산 처리 엔진 </mark>
 
-![](../images/pubg-6.png)
+![](../../images/pubg-6.png)
 
 * Spark는 원래 분산 처리 엔진 / Flink는 처음부터 스트림 처리 엔진
 
@@ -116,7 +116,7 @@ comments: true
 
 ### **PUBG의 A/B 테스트**
 
-![다이어그램](../images/pubg-8.png)
+![다이어그램](../../images/pubg-8.png)
 
 * 아직 풀어야 하는 문제들: 비용 최적화, 배포 자동화
   
@@ -134,7 +134,7 @@ comments: true
 * 강연자: 오우택, 김민수
 * 링크: [NDC Replay 오우택, 김민수님 발표](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0021.html#c=NDC2019&t%5B%5D=%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D&p=2)
 
-![](../images/cookie-0.png)
+![](../../images/cookie-0.png)
 
 :deciduous_tree: **쿠키런: 오븐브레이크**
 
@@ -145,7 +145,7 @@ comments: true
 
 ### **초급 스타터 패키지**
 
-![](../images/cookie-1.jpg)
+![](../../images/cookie-1.jpg)
 
 * 유저가 처음 사용하는 유료 상품
 * 신규 유저를 위한 혜택은 **구매 시간 제한**이 있음
@@ -159,11 +159,11 @@ comments: true
 
 * 1시간, 1일, 3일을 노출했을 때 어떤 판매 시간이 최적일까? 
 
-  ![](../images/cookie-2.png)
+  ![](../../images/cookie-2.png)
 
 * 만약 각 아이디어를 날짜에 따라 개별적으로 실험할 경우 
 
-![](../images/cookie-3.png)
+![](../../images/cookie-3.png)
 
 * 기획자 별로 타당한 이유로 시간 제한을 다르게 생각
 * BUT, 날짜에 따라 어떻게 배치하느냐에 따라 공휴일 or 국가적 특성으로 인해 랜덤하게 선택되지 않음
@@ -217,7 +217,7 @@ comments: true
 
 **1. 로그인하는 순서대로?**
 
-![](../images/cookie-4.png)
+![](../../images/cookie-4.png)
 
 * 1시간 -> 1일 -> 3일 로그인 순서대로 균등하게 배정
   * BUT, 이런 방법은 로그인 순서를 기록해야하는 문제
@@ -226,7 +226,7 @@ comments: true
 **2. 유저를 숫자로 맵핑?**
 
 * 유저 아이디 $$\Rightarrow$$ 해시값으로 변환
-![](../images/cookie-5.png)
+![](../../images/cookie-5.png)
 
 * 해시값을 기준으로 그룹 배정
   * 3333 미만 1시간 그룹
@@ -250,20 +250,20 @@ comments: true
 
 * 각 그룹별로 국가 분포, 스테이지 도달률, 과금 비율, 레벨 분포가 동질한 지 검정
 
-![](../images/cookie-6.png)
+![](../../images/cookie-6.png)
 
 ---
 
 ### **여러 실험 동시에 하기**
 
-![](../images/cookie-7.png)
+![](../../images/cookie-7.png)
 
 * 만약 A/B 테스트를 하는데 판매 시간이 거의 끝나갈 때 쯤 "마감 임박"을 한다면?
 * 판매 기간 + 마감 임박 두 가지의 실험을 해야 하는 문제가 있음
 
 :deciduous_tree: **실험의 적용 범위 설정** 
 
-![](../images/cookie-8.png)
+![](../../images/cookie-8.png)
 
 * 유저가 동시에 다른 실험에 노출되면 안된다.
 * 유저를 10,000개의 작은 그룹으로 나눈다.
@@ -279,11 +279,11 @@ comments: true
 
 * 판매기간 실험을 0~4,999의 해시값을 가진 유저만 배정하면 3일 그룹 전체와 1일 그룹 일부가 실험 적용 범위에 포함되지 않는 문제!
 
-![](../images/cookie-9.png)
+![](../../images/cookie-9.png)
 
 * 실험마다 실험군 기준이 달라지게 조정: 해시값을 변환하기 전에 테스트 이름을 유저아이디에 붙여서 해결
 
-![](../images/cookie-10.png)
+![](../../images/cookie-10.png)
 
 ---
 
@@ -297,7 +297,7 @@ comments: true
 
 :deciduous_tree: **A/B 테스트 플랫폼 플로우**
 
-![](../images/cookie-11.png)
+![](../../images/cookie-11.png)
 
 1. 게임 개발자는 콘솔을 통해 실험을 조회, 설정
 2. 플랫폼 서버의 데이터 베이스에 해당 정보 저장: 게임 유저가 로그인할 때 마다 A/B 테스트 로직에 따라 배정됨
@@ -312,7 +312,7 @@ comments: true
 
 * 2주의 시간이 지나고 상품이 얼마나 팔렸을까?
 
-![](../images/cookie-12.png)
+![](../../images/cookie-12.png)
 
 * 숫자만 봤을 때는 3일 그룹이 가장 좋다고 말하기가 어려움
 * **직관적으로** 결과 측정을 할 수 있어야 한다.
@@ -332,7 +332,7 @@ comments: true
 
 ## **느낀 점** 
 
-![](../images/cookie-conclusion.png)
+![](../../images/cookie-conclusion.png)
 [이미지 링크](https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwikoKaS8v3nAhVUyIsBHSSoA6UQjRx6BAgBEAQ&url=https%3A%2F%2Fgongu-s2.tistory.com%2F1130&psig=AOvVaw2GjW5qn4n3zFf60ml1sxI9&ust=1583309872952036)
 {:.figure}
 
