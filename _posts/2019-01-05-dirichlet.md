@@ -2,7 +2,7 @@
 layout: post
 title: "Dirichlet Distribution: Conjugate Prior for Multinomial Distribution"
 date: 2019-01-05 
-categories: [bayesian]
+categories: [Bayesian]
 tag: [dirichlet, bayesian, multinomial]
 comments: true
 ---

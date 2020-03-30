@@ -2,7 +2,7 @@
 layout: post
 title: AWS EC2 인스턴스에서 Python, Jupyter Notebook 설치하기
 date: 2020-03-20
-categories: [db]
+categories: [AWS]
 tag: [aws, cloud, ec2,python,jupyter-notebook]
 comments: true
 ---

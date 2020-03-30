@@ -2,7 +2,7 @@
 layout: post
 title: AWS Scalability & Elastic Load Balancer (ELB) 이해하기
 date: 2020-03-19
-categories: [db]
+categories: [AWS]
 tag: [aws, cloud, ec2,scalability]
 comments: true
 ---

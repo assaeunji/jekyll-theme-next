@@ -2,7 +2,7 @@
 layout: post
 title: AWS EC2 인스턴스에 고정 IP (Elastic IP) 연결하기  
 date: 2020-03-30
-categories: [db]
+categories: [AWS]
 tag: [aws, cloud, ec2,elastic-IP]
 comments: true
 ---
