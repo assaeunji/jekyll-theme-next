@@ -17,7 +17,7 @@ date_format: '%Y-%m-%d'
 url:
 baseurl:
 # permalink: pretty
-permalink: pretty
+permalink: /:categories/:year-:month-:day-:title/
 
 # Pagination
 paginate: 10
