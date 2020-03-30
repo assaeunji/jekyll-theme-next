@@ -43,20 +43,20 @@ Elastic IP를 발급 받고나서 주의할 점은 **고정 IP를 인스턴스�
 
 **Step1. Elastic IP 할당**
 
-![](../images/elasticIP-1.png)
+![](../../images/elasticIP-1.png)
 
 EC2 관리 콘솔을 열고 왼쪽 메뉴판의 `네트워크 및 보안 > 탄력적 IP`를 클릭하면 다음과 같이 화면에 뜹니다. 그러면 주황색 버튼 `탄력적 IP 주소 할당`을 클릭하고 다음 페이지에서도 `할당`을 클릭합니다.
 
 
 **Step2. 인스턴스에 Elastic IP 연결**
 
-![](../images/elasticIP-2.png)
+![](../../images/elasticIP-2.png)
 발급이 끝나면 위와 같이  화면이 뜨는데, 여기서 `Actions > 탄력적 IP 주소 연결`을 클릭합니다.
 
-![](../images/elasticIP-3.png)
+![](../../images/elasticIP-3.png)
 `인스턴스`항목에 기존에 생성한 인스턴스를 선택하고, `연결`을 클릭합니다. 
 
-![](../images/elasticIP-4.png) 
+![](../../images/elasticIP-4.png) 
 위와 같이 `IPv4 퍼블릭 IP`와 `탄력적 IP`가 똑같이 나오면 성공입니다!
 
 

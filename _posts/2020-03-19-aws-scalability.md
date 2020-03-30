@@ -31,7 +31,7 @@ Scalability는 서버에서 과부하가 일어났을 때 대처할 수 있는 �
 물리적 형태라 하면 이에 맞는 운영체제 (MacOS, Linux, Windows)를 설치하고 이에 맞는 소프트웨어를 설치할 수 있는 컴퓨터를 의미하는데요.
 가상머신은 이러한 운영체제 위에 설치된 일개의 **소프트웨어 프로그램**에 불과하지만, 가상 컴퓨터 환경을 만들어서 여러 개의 운영체제를 운영하는 것을 가능하게 합니다. 이를 구조화하면 다음 그림과 같습니다.
 
-![](../images/aws-scale-1.png)
+![](../../images/aws-scale-1.png)
 
 개인용 가상머신은 VMWare, Virtual Box, Parallels 등이 있습니다. 
 맥에서 인터넷 뱅킹에 필요한 Active X를 설치해야하는 경우 Parallels를 이용해서 윈도우를 가상머신으로 쓰는 경우가 종종 있죠.
@@ -79,7 +79,7 @@ Scale-out을 한 단어로 표현하면 **협력**입니다. 많은 인스턴스
 이를 이해하기 위해 웹 애플리케이션 개발에서 Scale-out을 어떻게 하는 지에 대해 알아보겠습니다.
 
 웹 서버를 위한 인스턴스는 세 가지로 구성되어 있습니다.
-![](../images/aws-scale-2.png)
+![](../../images/aws-scale-2.png)
 
 * Web Server: 사용자가 브라우저를 통해 접속한 것을 받아서 서버의 결과물을 사용자에게 다시 돌려보내는 **교환원**의 역할 (ex. Apache)
 * Middleware: 실질적의 웹 애플리케이션이 동작하는 방법을 담당 (ex. Php, Python의 Django, Ruby의 Ruby on Rails)
@@ -87,7 +87,7 @@ Scale-out을 한 단어로 표현하면 **협력**입니다. 많은 인스턴스
 
 Scale-up만으로 과부하가 해결되지 않을 경우 Scale-out을 이용합니다.
 
-![](../images/aws-scale-3.png)
+![](../../images/aws-scale-3.png)
 
 과부하가 일어날 경우 위의 그림처럼 인스턴스 (Computer2)를 추가해 기존의 인스턴스 (Computer1)에 있던 Database server를 **이전**해서 Database만을 위한 서버로 만듭니다.
 
@@ -100,13 +100,13 @@ Scale-up만으로 과부하가 해결되지 않을 경우 Scale-out을 이용합
 
 또 서비스가 느려져서 그 원인을 찾아보니 Middleware에서 많은 컴퓨팅 파워가 쓰인다는 것을 발견했다 가정해봅시다.
 
-![](../images/aws-scale-4.png)
+![](../../images/aws-scale-4.png)
 
 이 경우에 마찬가지로 Middleware를 새로운 인스턴스 (Computer3)에 이전하면 더 나은 Scalability를 구축할 수 있습니다.
 
 Database의 성능이 자꾸 저하될 경우 더 많은 컴퓨터를 동원해서 Middleware와 Database에 인스턴스를 구축합니다.
 
-![](../images/aws-scale-5.png)
+![](../../images/aws-scale-5.png)
 
 또, **샤딩**을 통해서 Database Master를 분할하고, 이를 복제해서 Database Slave를 구축할 수 있습니다.
 샤딩은 예를 들어 1~1000 고객은 Database Master 1에 저장하고, 2000~3000번의 고객 정보는 Database Master 2에 저장하는 등 
@@ -117,11 +117,11 @@ Database의 성능이 자꾸 저하될 경우 더 많은 컴퓨터를 동원해�
 
 **Q. 이를 해결하기 위해서 어떻게 할까요?**
 
-![](../images/aws-scale-sol1.png)
+![](../../images/aws-scale-sol1.png)
 
 첫 번째 해결 방법은 DNS 서버의 설정을 바꾸는 것입니다. DNS 서버는 원래 IP를 하나만 할당하도록 되어있지만, 설정을 바꿔서 여러 개의 IP를 할당할 수 있도록 한다면 Web Server의 인스턴스를 추가할 수 있습니다.
 
-![](../images/aws-scale-sol2.png)
+![](../../images/aws-scale-sol2.png)
 
 두 번째 해결 방법은 **Load Balancer** 장치를 설치하는 것입니다. 
 Load Balance란 부하의 균형을 잡아줘서 부하를 골고루 분산될 수 있도록 하는 장치입니다. Load Balancer는 인스턴스 사양에 맞게 사용자의 접속을 분산시켜주고 한 대의 Web Server가 다운되면 이를 감지해 다른 Web Server로 우회하는 역할을 통해 Web Server를 여러 대를 구축할 수 있도록 합니다. AWS에서는 이를 위해 **ELB** (Elastic Load Balancing) 서비스를 사용합니다.

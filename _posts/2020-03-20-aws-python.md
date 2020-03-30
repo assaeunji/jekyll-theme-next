@@ -27,7 +27,7 @@ source ~/.bashrc
 
 두 번째 명령어인 `sudo sh Anaconda3-5.0.0.1-Linux-x86_64.sh`를 치면 `Enter`를 누르면 다음과 같이 라이센스 계약서가 나옵니다. 끝까지 `Enter`를 누르고 라이센스에 동의하냐는 질문이 나오면 `yes`를 타이핑해서 끝까지 설치해줍니다.
 
-![](../images/aws-python-terminal.gif)
+![](../../images/aws-python-terminal.gif)
 
 ---
 ## **Install Jupyter Notebook Server on EC2**
@@ -46,7 +46,7 @@ jupyter notebook --generate-config
 
 그러면 XShell에 이러한 메세지가 뜹니다. 
 
-![](../images/aws-python-config.png)
+![](../../images/aws-python-config.png)
 
 자 이제 Jupyter Notebook을 EC2 서버에 탑재하기 위한 본격적인 과정입니다. 
 먼저, Jupyter Notebook 서버에 접속할 때 필요한 **비밀번호**를 설정하기 위해 `ipython`에 접속합니다.
@@ -63,7 +63,7 @@ passwd()
 exit
 ~~~
 
-![](../images/aws-python-ipython.png)
+![](../../images/aws-python-ipython.png)
 
 `In [2]`에서 `passwd()`를 치면 Jupyter notebook을 서버로 접속하는 데 필요한 비밀번호를 설정합니다. 비밀번호를 터미널에 쳐도 보이지 않는 게 정상입니다 :smile:
 
@@ -74,7 +74,7 @@ exit
 vi ~/.jupyter/jupyter_notebook_config.py
 ~~~
 
-![](../images/aws-python-vi.png)
+![](../../images/aws-python-vi.png)
 
 `vi`명령어를 쓰면 이와 같이 `jupyter_notebook_config.py`파일이 뜹니다. 
 모두 `#`으로 주석 처리가 되어있기 때문에 Configuration이 빈 파일입니다.
@@ -109,17 +109,17 @@ sudo jupyter-notebook allow-root&
 이제 EC2 Server 안에 있는 Jupyter Notebook을 웹에서 보는 과정입니다.
 그 전에 AWS의 EC2 대시보드에서 **네트워크 보안 > 보안 그룹**에 들어가 8888번 포트 방화벽을 여는 과정이 필요합니다.
 
-![](../images/aws-python-security.png)
+![](../../images/aws-python-security.png)
 
 그럼 이런 화면이 뜨는데 아래의 창에서 **Inbound Rules**를 클릭 후 `Edit Inbound Rules`를 클릭합니다.
 
-![](../images/aws-python-tcp.png)
+![](../../images/aws-python-tcp.png)
 
 이와 같이 `Type`은 `Custom TCP`, `Port range`는 `8888`, `Source`는 `Anywhere`로 해서 `Save Rules`를 클릭합니다.
 
 이제 다시 `인스턴스`로 돌아가서 자신의 IPv4 퍼블릭 IP을 확인하시고 `http://IP주소:8888/`로 접속합니다. 제 경우 `http://13.124.37.97:8888/`로 접속했습니다.
 
-![](../images/aws-python-jupyter.png)
+![](../../images/aws-python-jupyter.png)
 
 그럼 이런 창이 뜨면 아까 `ipython`에서 `passwd()`명령어를 통해 설정한 비밀 번호를 쳐서 접속합니다!
 
