@@ -6,16 +6,9 @@ categories: [db]
 tag: [aws, cloud, ec2,elastic-IP]
 comments: true
 ---
-# AWS EC2 인스턴스에 고정 IP (Elastic IP) 연결하기  
 
 * 고정 IP를 EC2 인스턴스에 연결하는 방법에 대해 알아봅니다.
 
----
-## **Contents**
-{:.no_toc}
-0. this unordered seed list will be replaced by toc as unordered list
-{:toc}
----
 
 ## **Elastic IP?**
 
