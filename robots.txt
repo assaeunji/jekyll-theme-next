@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://assaeunji.github.io/sitemap.xml
