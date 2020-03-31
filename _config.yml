@@ -6,10 +6,10 @@
 # Site
 title: Be Geeky
 subtitle:
-description: "TEST"
+description: "좋아하는 것을 잘하는 게 꿈입니다."
 author: Eunji Lee
 # Support language: de, en, fr-FR, id, ja, ko, pt-BR, pt, ru, zh-Hans, zh-hk, zh-tw
-language: en
+language: ko
 date_format: '%Y-%m-%d'
 
 
