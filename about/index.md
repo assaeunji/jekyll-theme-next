@@ -13,7 +13,8 @@ type: about
 
 * Github: [http://github.com/assaeunji](http://github.com/assaeunji)
 * Mail: [assaeunji@gmail.com]()
-* Resume: [Resume]()
+* Resume: [Resume](https://drive.google.com/open?id=1Sh3neFtPXLvUoFt-EDWiwseYFwY0XwoN&authuser=assaeunji@korea.ac.kr&usp=drive_fs)
+
 --- 
 
 
