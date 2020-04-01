@@ -3,7 +3,7 @@ layout: page
 type: about
 ---
 
-![](../../images/me.gif)
+![](../../images/me.jpg){: width="200", height="200"}
 <mark style="background-color: #fff5b1">
 좋아하는 것을 잘하는 게 꿈입니다.
 </mark>
@@ -16,7 +16,7 @@ type: about
 
 
 `덕업일치`를 꿈꿉니다. `게임`을 좋아해서 이를 `업`으로 삼고 싶습니다. 다음은 제가 한 게임 목록입니다. <mark style='background-color: yellow'>노란색</mark>은 그중에서도 특히 heavy하게 한 게임들입니다.
-  ![](../../images/game-list.png){: width = "220"}
+  ![](../../images/game-list.png){: width = "220", height="400"}
 
 이 중에서도 `큐플레이, 메이플스토리, 액션퍼즐패밀리, 완미세계, 프렌즈팝, 라인레인저스, 오버워치, 브롤스타즈`를 참 좋아하고 많이 했습니다.
 어릴 땐 `퀴즈 / 퍼즐 게임`, `MMORPG`의 게임을 좋아했고, 지금은 `슈팅 게임` 위주로 하고 있습니다.
