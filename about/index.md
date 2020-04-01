@@ -13,7 +13,7 @@ type: about
 
 * Github: [http://github.com/assaeunji](http://github.com/assaeunji)
 * Mail: [assaeunji@gmail.com]()
-
+* Resume: [Resume]()
 --- 
 
 
