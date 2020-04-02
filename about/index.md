@@ -17,7 +17,6 @@ type: about
 
 --- 
 
-
 `덕업일치`를 꿈꿉니다. `게임`을 좋아해서 이를 `업`으로 삼고 싶습니다. 다음은 제가 한 게임 목록입니다. <mark style='background-color: yellow'>노란색</mark>은 그중에서도 특히 heavy하게 한 게임들입니다.
   ![](../../images/game-list.png){: width = "200", height="300"}
 
