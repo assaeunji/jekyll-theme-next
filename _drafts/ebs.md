@@ -1,10 +1,20 @@
 ---
 layout: post
-title: AWS EBS 장착하기
+title: Python boto3으로 MySQL과 S3 연동하기
 date:
 categories: []
 tag: []
 comments: true
 ---
 
-EBS<sup>Elastic Block Store</sup>는 EC2 인스턴스에 장착하는 '하드디스크'나  
+
+---
+## Introduction
+
+RDS<sup>Relational Database Service, 관계형 데이터 베이스</sup>
+
+
+---
+## How to use RDS in AWS?
+
+## `boto3`
