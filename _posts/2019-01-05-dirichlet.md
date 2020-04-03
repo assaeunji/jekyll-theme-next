@@ -43,6 +43,7 @@ $$
 
 cf. 베타분포는 감마분포를 따르는 확률변수 $$2$$개로 구성된다. 즉, $$G_1,\ G_2$$가 각각 $$G_1\sim \text{Gam}(\alpha_1,1)$$, $$G_2 \sim \text{Gam}(\alpha_2,1)$$를 따른다 할 때, $$\theta = \frac{X_1}{X_1+X_2} \sim \text{Beta}(\alpha_1, \alpha_2)$$이다.
 
+---
 ## **Likelihood: Multinomial Distribution**
 
 다항분포도 디리슐레분포와 마찬가지로, 이항분포의 multivariate 버전이다. 즉, 2개의 선택지 대신 $$k$$개의 선택지가 있을 때, 각각 선택지가 $$\theta_i$$의 확률로 뽑힌다. 명확한 정의는 다음과 같다.
@@ -56,7 +57,6 @@ $$
 * $$\sum_j p_j = 1$$
 
 ---
-
 ## **Conjugacy: Dirichlet & Multinomial Distribution**
 디리슐레 분포(Dirichlet distribution)는 다항분포 (Multinomial distribution)의 확률 $$\theta_i$$를 모델링하는데 쓰이는 사전분포이다. 여기서 Conjugacy가 성립한다.  그렇다면 여기서 conjugacy를 어떻게 해석해야 할까? 사전분포가 디리슐레 분포이고, 가능도가 다항분포이면 사후분포도 다시 디리슐레 분포를 따를 때, (즉, 사전분포와 사후분포의 형태가 같을 때) "켤레성"(conjugacy)을 띤다고 말한다.
 
