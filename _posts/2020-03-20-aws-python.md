@@ -100,7 +100,7 @@ vi ~/.jupyter/jupyter_notebook_config.py
 수정 후 `vi`편집기에서 나오면 다시 XShell 창에 다음과 같이 입력해서 Jupyter Notebook을 실행합니다.
 
 ~~~
-sudo jupyter-notebook allow-root&
+sudo jupyter-notebook --allow-root&
 ~~~
 
 ---
@@ -117,7 +117,7 @@ sudo jupyter-notebook allow-root&
 
 이와 같이 `Type`은 `Custom TCP`, `Port range`는 `8888`, `Source`는 `Anywhere`로 해서 `Save Rules`를 클릭합니다.
 
-이제 다시 `인스턴스`로 돌아가서 자신의 IPv4 퍼블릭 IP을 확인하시고 `http://IP주소:8888/`로 접속합니다. 제 경우 `http://13.124.37.97:8888/`로 접속했습니다.
+이제 다시 `인스턴스`로 돌아가서 자신의 IPv4 퍼블릭 IP을 확인하시고 `http://IP주소:8888/`로 접속합니다. 
 
 ![](../../images/aws-python-jupyter.png)
 
