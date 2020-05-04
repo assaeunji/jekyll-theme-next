@@ -114,3 +114,4 @@ $$
  * 카카오 데이터분석가 이민호님 발표: Causal Inference [`[link]`](https://www.slideshare.net/lumiamitie/causal-inference-primer-20190601)
  * https://causalinference.gitlab.io/kdd-tutorial/methods.html
  * https://onedrive.live.com/View.aspx?resid=FB9A18AE325D3EFB!5374&wdSlideId=1800&wdModeSwitchTime=1587882572368&authkey=!APDx8SBOro95IR8
+ * http://www.degeneratestate.org/posts/2018/Mar/24/causal-inference-with-python-part-1-potential-outcomes/
