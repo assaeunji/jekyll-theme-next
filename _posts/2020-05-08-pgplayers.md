@@ -65,7 +65,7 @@ def solution(participant, completion):
 ```
 
 
-예를 들어 입력 2의 `participant`와 `completion`으로 `collections.Counter`를 해보면 다음과 같은 원리로 답을 낼 수 있다.
+예를 들어 입력 2의 `participant`와 `completion`으로 `collections.Counter`를 해보면 다음과 같은 원리로 답을 낼 수 있다.w
 
 ```python
 participants = ["marina","josipa","nikola", "vinko","filipa"]
