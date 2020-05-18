@@ -18,7 +18,6 @@ comments: true
 이전 포스팅에서 Potential outcomes에 대해 간단히 살펴봤는데요. 더 구체적인 예시로 설명해보고자 합니다.
 
 인과 관계 추론의 목적은 처리 (Treatment) $Z$가 결과 (Outcome) $Y$에 미치는 효과를 추정하는 것입니다.
-
 그러나 교란변수 (Confounder) $X$는 $Z$와 $Y$에 모두 영향을 주어 $Z$의 순수 효과를 추정하는 것을 방해합니다. 따라서 $Z\rightarrow Y$의 인과관계를 추정하기 위해서는 $X\rightarrow Z$의 종속 관계를 끊는 것이 중요합니다. 즉, 
 
 $$
