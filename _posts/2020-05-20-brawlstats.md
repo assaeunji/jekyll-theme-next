@@ -11,6 +11,7 @@ photos:
 ---
 
 * 마침 Python의 `brawlstats` 라이브러리가 브롤 스타즈 API wrapper를 제공하고 있어 전투 기록을 모으는 게 가능해졌습니다. 따라서 이 포스팅에서는 다음과 같이 전투 기록을 주기적으로 모으는 방법에 대해 설명하고자 합니다.
+* 관련 코드는 [이 곳](https://github.com/assaeunji/brawlstars-analysis)에서 확인하실 수 있습니다.
 
 ---
 
