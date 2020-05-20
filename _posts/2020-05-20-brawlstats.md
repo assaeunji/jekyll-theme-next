@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Python으로 브롤 스타즈 전투 기록 수집하기
+title: Python brawlstats으로 브롤 스타즈 전투 기록 수집하기
 date: 2020-05-20
 categories: [Data analysis]
 tag: [brawlstats,brawlstars,parsing,python,data-collection]
@@ -31,13 +31,15 @@ photos:
 
 본격적으로 들어가기 전에 설명드릴 개념은 다음과 같습니다.
 
+![](../../images/brawl-info.png)
+
 1. **젬 그랩(Gem Grab)**: 3 대 3으로 팀을 이루고, 팀 총합 보석을 10개 이상 얻고 카운트다운이 종료될 때까지 버틴 팀이 승리하는 게임
 3. **맵**: 젬 그랩에서 싸우는 장소, 하루 정도 지나면 맵이 바뀌고, 맵에 따라 맞는 브롤러들이 다름
 2. **브롤러**: 젬 그랩에서 싸우는 캐릭터, 유저 별로 가진 브롤러 중 하나를 택해 젬 그랩에 참여할 수 있음
 3. **트로피**: 게임에서 이길 때마다 브롤러 트로피가 8씩 더해지고, 지면 브롤러의 랭크에 따라 감소됨 
 4. **스타파워** & **가젯**
-   1. 스타 파워는 브롤러 랭크가 10일 때 가지는 추가 능력
-   2. 가젯은 브롤러 랭크가 7이상일 때 가지는 추가 능력이고 게임 당 2~3번씩 발동 가능. 보통은 스타 파워에 비해 미미하나 브롤러에 따라 매우 강력할 수 있음
+   1. 스타 파워는 브롤러 파워레벨이 10일 때 가지는 추가 능력 (패시브 스킬)
+   2. 가젯은 브롤러 파워레벨이 7 이상일 때 가지는 추가 능력이고 게임 당 2~3번씩 발동 가능. 보통은 스타 파워에 비해 미미하나 브롤러에 따라 매우 강력할 수 있음
 
 ---
 ## 토큰 발급 및 Python `brawlstats` 설치
@@ -64,10 +66,10 @@ photos:
 
 Python의 `brawlstats` 라이브러리에 대한 공식 문서는 [이 곳](https://brawlstats.readthedocs.io/en/latest/)에서 찾을 수 있습니다.
 
-전투 기록을 파싱하려면 앞서 발급받은 **토큰**과 내 게임 **태그**가 필요합니다. 게임 태그는 브롤 스타즈에 접속해서 좌측 상단의 제 닉네임을 클릭하시면 확인할 수 있습니다.
+전투 기록을 파싱하려면 앞서 발급받은 **토큰**과 내 게임 **태그**가 필요합니다. 게임 태그는 브롤 스타즈에 접속해서 **좌측 상단**의 제 닉네임을 클릭하시면 확인할 수 있습니다.
 아래 사진에서 `#URC00YYV`가 제 게임 태그입니다. 
 
-![](../../images/brawl-tag.jpg)
+![](../../images/brawl-tag.png)
 
 전투 기록을 불러오려면 태그 가장 앞에 있는 `#`을 제외하고 입력하셔야 합니다. 다음 코드에서 `tag`에 해당합니다.
 
@@ -101,7 +103,7 @@ battles=client.get_battle_logs(tag)
 
 <details>
 <summary>펼쳐 보기</summary>
-<div markdown=1>
+<div markdown="1">
 <br/>
 
 ```python
@@ -205,22 +207,17 @@ battles=client.get_battle_logs(tag)
 
 ![](../../images/brawl-user.png)
 
-`get_profile`은 
-* 유저의 총 트로피
-* 모드 별 승리 횟수
-* 유저의 브롤러 정보 (랭크, 파워 레벨, 트로피, 가젯, 스타 파워) 
-
-등을 포함하고 있습니다. 저는 팀원 1 ~ 6 까지의 상세한 정보 (총 트로피, 최우선 브롤러, 브롤러 가젯 및 스타파워 여부)도 파싱하기 위해 `brawlstats`의 `get_profile`함수를 사용했습니다.
+`brawlstats`의 `get_profile`함수를 이용하면 위와 같이 모드별 승리 횟수나 브롤러 보유 정보에 대해 불러올 수 있습니다.
 
 ```python
 profile = client.get_profile(tag)
 ```
 
-`profile`을 출력하면 `<Player object name='응찌' tag='#URC00YYV'>`라 나오고, 제 정보를 더 확인하려면 `profile.raw_data`라 입력하면 다음과 같이 제 모든 게임 정보들이 나옵니다.
+`profile`을 출력하면 `<Player object name='응찌' tag='#URC00YYV'>`라 나오고, `profile.raw_data`라 입력하면 다음과 같이 제 모든 게임 정보들이 나옵니다.
 
 <details>
 <summary>펼쳐 보기</summary>
-<div markdown=1>
+<div markdown="1">
 <br/>
 
 ```python
