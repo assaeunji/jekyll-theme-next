@@ -186,11 +186,11 @@ battles=client.get_battle_logs(tag)
    2. type: 게임 타입
    3. result: victory (승)/defeat (패)
    4. duration: 게임 지속 시간 (초)
-   5. trophy_change: 게임 결과로 인한 내 캐릭터의 트로피 변의
+   5. trophy_change: 게임 결과로 인한 내 캐릭터의 트로피 변화
    6. star_player: 스타플레이어, 이긴 팀에서 1명 뽑힘
       1. tag: 스타플레이어의 태그
-      2. name: 스타플레이어 명
-      3. brawler: 스타플레이어의 브롤러 (캐릭터)
+      2. name: 스타플레이어의 이름
+      3. brawler: 스타플레이어의 브롤러
       4. teams: 팀 정보
          1. 우리 팀
             1. 팀원 1
@@ -208,7 +208,7 @@ battles=client.get_battle_logs(tag)
 
 ![](../../images/brawl-user.png)
 
-`brawlstats`의 `get_profile`함수를 이용하면 위와 같이 모드별 승리 횟수나 브롤러 보유 정보에 대해 불러올 수 있습니다.
+`brawlstats`의 `get_profile`함수를 이용하면 위와 같이 **모드별 승리 횟수**나 **브롤러 보유 정보**에 대해 불러올 수 있습니다.
 
 ```python
 profile = client.get_profile(tag)
