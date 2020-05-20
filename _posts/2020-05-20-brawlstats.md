@@ -2,8 +2,8 @@
 layout: post
 title: Python brawlstats으로 브롤 스타즈 전투 기록 수집하기
 date: 2020-05-20
-categories: [Data analysis]
-tag: [brawlstats,brawlstars,parsing,python,data-collection]
+categories: [Data Analysis]
+tag: [brawlstats,brawlstars,parsing,python,data-collection,aws,ec2]
 comments: true
 photos:
     - "../../images/brawl-officialapi.png"
