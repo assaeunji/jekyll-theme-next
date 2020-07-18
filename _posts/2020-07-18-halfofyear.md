@@ -30,7 +30,7 @@ photos:
 
 과연... 잘 지켰을까요? 
 
-![](../../images/halfofyear-conan.png)
+![](../../images/halfofyear-conan.jpg)
 이미지 출처 [`[link]`](https://blog.naver.com/PostView.nhn?blogId=ooo---ooo&logNo=221101664741)
 {:.figure}
 
@@ -46,7 +46,7 @@ photos:
 * 글을 쓰고 검토하는 데 하루
 가 걸립니다. 패기 하나로 4일마다 글을 쓰겠어! 라고 말했던 것에 대해 반성합니다. 저는 평균 "**일주일**"을 계획하고 글을 쓰면 좋을 것 같습니다.
 
-![](../../images/halfofyear-jandi.png)
+![](../../images/halfofyear-jandi.jpg)
 
 그러나 제가 더 글을 빈번하게 & 주기적으로 써야하는 것은 맞습니다! 2월부터 지금까지의 GitHub 잔디를 보면... 글쓰는 주기가 매우 불규칙하죠. 
 심지어 5월 말부터 6월 말까지 (취업 준비 시즌)는 아예 쓰지도 못했습니다...일을 시작한 후에는 겨우겨우 글또 활동을 연명하고 있습니다.... 반성합니다.
