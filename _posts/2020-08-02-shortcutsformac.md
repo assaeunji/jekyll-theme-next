@@ -64,18 +64,17 @@ comments: true
 * `⌘+T`: 새 탭 열기
 * `⌘+W`: 윈도우 닫기
 * `⌘+tab`: 다음 앱으로 전환
-* <mark style='background-color: #fff5b1'⌃+⌘+스페이스 바</mark>: 이모지 삽입
-* <mark style='background-color: #fff5b1'⌥+₩</mark>: ` (back quote) 삽입
-* <mark style='background-color: #fff5b1'⌘+M</mark>: 창 최소화
-* <mark style='background-color: #fff5b1'⌥+⌘+F</mark>: 전체 화면 크기로 전환 
-* <mark style='background-color: #fff5b1'⌥+⌘+esc</mark>: 앱 강제 종료
-* <mark style='background-color: #fff5b1'⌘+스페이스 바</mark>: Spotlight 검색 필드를 표시
-* <mark style='background-color: #fff5b1'⇧+⌘+3</mark>: 전체 화면 캡처
-* <mark style='background-color: #fff5b1'⇧+⌘+4</mark>: 선택 화면 캡처 (Default), 창, 전체화면 캡처
-* <mark style='background-color: #fff5b1'⇧+⌘+5</mark>: macOS Mojave 및 이후 버전에서 스크린샷을 찍거나 화면 녹화
-* <mark style='background-color: #fff5b1'⇧+⌘+N</mark>: 새 폴더 생성
-* <mark style='background-color: #fff5b1'⌘+쉼표(,)</mark>: 환경설정 열기
-
+* <mark style='background-color: #fff5b1'>⌃+⌘+스페이스 바</mark>: 이모지 삽입
+* <mark style='background-color: #fff5b1'>⌥+₩</mark>: ` (back quote) 삽입
+* <mark style='background-color: #fff5b1'>⌘+M</mark>: 창 최소화
+* <mark style='background-color: #fff5b1'>⌥+⌘+F</mark>: 전체 화면 크기로 전환 
+* <mark style='background-color: #fff5b1'>⌥+⌘+esc</mark>: 앱 강제 종료
+* <mark style='background-color: #fff5b1'>⌘+스페이스 바</mark>: Spotlight 검색 필드를 표시
+* <mark style='background-color: #fff5b1'>⇧+⌘+3</mark>: 전체 화면 캡처
+* <mark style='background-color: #fff5b1'>⇧+⌘+4</mark>: 선택 화면 캡처 (Default), 창, 전체화면 캡처
+* <mark style='background-color: #fff5b1'>⇧+⌘+5</mark>: macOS Mojave 및 이후 버전에서 스크린샷을 찍거나 화면 녹화
+* <mark style='background-color: #fff5b1'>⇧+⌘+N</mark>: 새 폴더 생성
+* <mark style='background-color: #fff5b1'>⌘+쉼표(,)</mark>: 환경설정 열기
 
 <mark style='background-color: #fff5b1'>노란색 형광펜</mark>으로 칠한 단축키는 윈도우와 다르거나 맥북에만 있는 단축키를 의미합니다.
 
