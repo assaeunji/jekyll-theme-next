@@ -65,17 +65,17 @@ comments: true
 * `⌘+T`: 새 탭 열기
 * `⌘+W`: 윈도우 닫기
 * `⌘+tab`: 다음 앱으로 전환
-* <mark style='background-color: #fff5b1'>`⌃+⌘+스페이스 바`</mark>: 이모지 삽입
-* <mark style='background-color: #fff5b1'>`⌥+₩`</mark>: ` (back quote) 삽입
-* <mark style='background-color: #fff5b1'>`⌘+M`</mark>: 창 최소화
-* <mark style='background-color: #fff5b1'>`⌥+⌘+F`</mark>: 전체 화면 크기로 전환 
-* <mark style='background-color: #fff5b1'>`⌥+⌘+esc`</mark>: 앱 강제 종료
-* <mark style='background-color: #fff5b1'>`⌘+스페이스 바`</mark>: Spotlight 검색 필드를 표시
-* <mark style='background-color: #fff5b1'>`⇧+⌘+3`</mark>: 전체 화면 캡처
-* <mark style='background-color: #fff5b1'>`⇧+⌘+4`</mark>: 선택 화면 캡처 (Default), 창, 전체화면 캡처
-* <mark style='background-color: #fff5b1'>`⇧+⌘+5`</mark>: macOS Mojave 및 이후 버전에서 스크린샷을 찍거나 화면 녹화
-* <mark style='background-color: #fff5b1'>`⇧+⌘+N`</mark>: 새 폴더 생성
-* <mark style='background-color: #fff5b1'>`⌘+쉼표(,)`</mark>: 환경설정 열기
+* <mark style='background-color: #fff5b1'⌃+⌘+스페이스 바</mark>: 이모지 삽입
+* <mark style='background-color: #fff5b1'⌥+₩</mark>: ` (back quote) 삽입
+* <mark style='background-color: #fff5b1'⌘+M</mark>: 창 최소화
+* <mark style='background-color: #fff5b1'⌥+⌘+F</mark>: 전체 화면 크기로 전환 
+* <mark style='background-color: #fff5b1'⌥+⌘+esc</mark>: 앱 강제 종료
+* <mark style='background-color: #fff5b1'⌘+스페이스 바</mark>: Spotlight 검색 필드를 표시
+* <mark style='background-color: #fff5b1'⇧+⌘+3</mark>: 전체 화면 캡처
+* <mark style='background-color: #fff5b1'⇧+⌘+4</mark>: 선택 화면 캡처 (Default), 창, 전체화면 캡처
+* <mark style='background-color: #fff5b1'⇧+⌘+5</mark>: macOS Mojave 및 이후 버전에서 스크린샷을 찍거나 화면 녹화
+* <mark style='background-color: #fff5b1'⇧+⌘+N</mark>: 새 폴더 생성
+* <mark style='background-color: #fff5b1'⌘+쉼표(,)</mark>: 환경설정 열기
 
 
 <mark style='background-color: #fff5b1'>노란색 형광펜</mark>으로 칠한 단축키는 윈도우와 다르거나 맥북에만 있는 단축키를 의미합니다.
@@ -126,30 +126,30 @@ Finder는 윈도우의 폴더와 같은 개념입니다. Apple이 소개하고 �
 * `⌘+U`: 밑줄
 * `⌘+T`: 서체 윈도우를 표시
 * `⌘+D`: 열기 대화상자 또는 저장 대화상자 내에서 데스크탑 폴더 선택
-* <mark style='background-color: #fff5b1'>`⌃+⌘+D`</mark>: 선택한 단어의 **정의** 표시
-* <mark style='background-color: #fff5b1'>`⇧+⌘+콜론(:)`</mark>: 맞춤법 및 문법 윈도우를 표시
-* <mark style='background-color: #fff5b1'>`⌘+세미콜론(;)`</mark>: 문서에서 맞춤법 틀린 단어 찾기
-* <mark style='background-color: #fff5b1'>`⌥+delete`</mark>: 삽입 지점의 왼쪽에 있는 **단어** 삭제
-* <mark style='background-color: #fff5b1'>`fn+delete`</mark>: 삽입 지점의 오른쪽에 있는 **문자** 삭제
-* <mark style='background-color: #fff5b1'>`⌃+K`</mark>: 삽입 지점과 줄 끝 또는 단락 끝 사이에 있는 텍스트를 삭제
-* <mark style='background-color: #fff5b1'>`fn+↑`</mark>: 한 페이지 위로 스크롤
-* <mark style='background-color: #fff5b1'>`fn+↓`</mark>: 한 페이지 아래로 스크롤
-* <mark style='background-color: #fff5b1'>`fn+←`</mark>: 문서의 시작 위치로 스크롤
-* <mark style='background-color: #fff5b1'>`fn+→`</mark>: end</mark>: 문서의 끝으로 스크롤
-* <mark style='background-color: #fff5b1'>`⌘+↑`</mark>: 문서의 시작 위치로 이동
-* <mark style='background-color: #fff5b1'>`⌘+↓`</mark>: 문서의 끝으로 이동
-* <mark style='background-color: #fff5b1'>`⌘+←`</mark>: 현재 줄의 시작 위치로 이동
-* <mark style='background-color: #fff5b1'>`⌘+→`</mark>: 현재 줄의 끝으로 이동
-* <mark style='background-color: #fff5b1'>`⌥+←`</mark>: 이전 단어의 시작 위치로 이동
-* <mark style='background-color: #fff5b1'>`⌥+→`</mark>: 다음 단어의 끝으로 이동
-* <mark style='background-color: #fff5b1'>`⌘+왼쪽 중괄호({)`</mark>: 왼쪽에 맞추어 정렬
-* <mark style='background-color: #fff5b1'>`⌘+오른쪽 중괄호(})`</mark>: 오른쪽에 맞추어 정렬
-* <mark style='background-color: #fff5b1'>`⇧+⌘+수직 막대(|)`</mark>: 가운데에 맞추어 정렬
-* <mark style='background-color: #fff5b1'>`⌥+⌘+C`</mark>: 스타일 복사하기
-* <mark style='background-color: #fff5b1'>`⌥+⌘+V`</mark>: 스타일 붙여넣기
-* <mark style='background-color: #fff5b1'>`⇧+⌘+빼기 기호(-)`</mark>: 선택한 항목의 크기를 줄임
-* <mark style='background-color: #fff5b1'>`⇧+⌘+더하기 기호(+)`</mark>: 선택한 항목의 크기를 늘림
-* <mark style='background-color: #fff5b1'>`⇧+⌘+물음표(?)`</mark>: 도움말 메뉴
+* <mark style='background-color: #fff5b1'>⌃+⌘+D</mark>: 선택한 단어의 **정의** 표시
+* <mark style='background-color: #fff5b1'>⇧+⌘+콜론(:)</mark>: 맞춤법 및 문법 윈도우를 표시
+* <mark style='background-color: #fff5b1'>⌘+세미콜론(;)</mark>: 문서에서 맞춤법 틀린 단어 찾기
+* <mark style='background-color: #fff5b1'>⌥+delete</mark>: 삽입 지점의 왼쪽에 있는 **단어** 삭제
+* <mark style='background-color: #fff5b1'>fn+delete</mark>: 삽입 지점의 오른쪽에 있는 **문자** 삭제
+* <mark style='background-color: #fff5b1'>⌃+K</mark>: 삽입 지점과 줄 끝 또는 단락 끝 사이에 있는 텍스트를 삭제
+* <mark style='background-color: #fff5b1'>fn+↑</mark>: 한 페이지 위로 스크롤
+* <mark style='background-color: #fff5b1'>fn+↓</mark>: 한 페이지 아래로 스크롤
+* <mark style='background-color: #fff5b1'>fn+←</mark>: 문서의 시작 위치로 스크롤
+* <mark style='background-color: #fff5b1'>fn+→</mark>: end</mark>: 문서의 끝으로 스크롤
+* <mark style='background-color: #fff5b1'>⌘+↑</mark>: 문서의 시작 위치로 이동
+* <mark style='background-color: #fff5b1'>⌘+↓</mark>: 문서의 끝으로 이동
+* <mark style='background-color: #fff5b1'>⌘+←</mark>: 현재 줄의 시작 위치로 이동
+* <mark style='background-color: #fff5b1'>⌘+→</mark>: 현재 줄의 끝으로 이동
+* <mark style='background-color: #fff5b1'>⌥+←</mark>: 이전 단어의 시작 위치로 이동
+* <mark style='background-color: #fff5b1'>⌥+→</mark>: 다음 단어의 끝으로 이동
+* <mark style='background-color: #fff5b1'>⌘+왼쪽 중괄호({)</mark>: 왼쪽에 맞추어 정렬
+* <mark style='background-color: #fff5b1'>⌘+오른쪽 중괄호(})</mark>: 오른쪽에 맞추어 정렬
+* <mark style='background-color: #fff5b1'>⇧+⌘+수직 막대(|)</mark>: 가운데에 맞추어 정렬
+* <mark style='background-color: #fff5b1'>⌥+⌘+C</mark>: 스타일 복사하기
+* <mark style='background-color: #fff5b1'>⌥+⌘+V</mark>: 스타일 붙여넣기
+* <mark style='background-color: #fff5b1'>⇧+⌘+빼기 기호(-)</mark>: 선택한 항목의 크기를 줄임
+* <mark style='background-color: #fff5b1'>⇧+⌘+더하기 기호(+)</mark>: 선택한 항목의 크기를 늘림
+* <mark style='background-color: #fff5b1'>⇧+⌘+물음표(?)</mark>: 도움말 메뉴
 
 특히 단어 간 이동이 `⌥+←/→`이고 문장 간 이동이 `⌘+←/→`인게 윈도우랑 키가 달라서 헷갈리는데요. 계속 쓰다보면 익숙해질 것 같습니다.
 `⌃+K`도 좋은 단축키 같아서 생각나는대로 써볼 예정입니다.
