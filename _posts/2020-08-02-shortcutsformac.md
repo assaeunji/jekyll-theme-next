@@ -26,7 +26,7 @@ comments: true
 
 제가 산 맥북 사양은 다음과 같습니다.
 
-![](../../images/shorcutsformac-macbook.png)
+![](../../images/shortcutsformac-mac.png)
 
 * 무게는 1.4kg로 휴대성은 유지하면서도
 * 키감과 마우스패드의 향상
@@ -42,11 +42,10 @@ comments: true
 ## 기본 단축키
 [Apple 공식 사이트](https://support.apple.com/ko-kr/HT201236)에 있는 기본 단축키 중 자주 쓸 것 같은 단축키를 모아왔습니다.
 맥북 키보드에는 다음과 같은 키를 가지고 있습니다. 
-* ⌘(또는 cmd) ⌘
-* ⇧ ⇧
-* ⌥(또는 alt) ⌥
-* ⌃(또는 ctrl) ⌃
-* caps lock ⇪
+* ⌘(또는 cmd)
+* ⇧ (또는 shift)
+* ⌥(또는 alt)
+* ⌃(또는 ctrl)
 * fn
 
 대부분의 맥북 단축키는 윈도우 단축키의 `ctrl`가 `⌘` (커맨드 키)로 대체됩니다. 예를 들어 복사하기 (`Ctrl + C` $\rightarrow$ `⌘+C`), 붙여넣기 (`Ctrl + V` $\rightarrow$ `⌘+V`)로 1:1 호환이 됩니다.
