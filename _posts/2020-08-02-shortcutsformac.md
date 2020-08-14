@@ -2,7 +2,7 @@
 layout: post
 title: 편리한 맥북 사용을 위한 단축키
 date: 2020-08-02
-categories: [ML]
+categories: [ETC]
 tag: [mac, shortcuts]
 comments: true
 ---
