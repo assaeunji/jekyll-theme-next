@@ -1,11 +1,18 @@
 ---
 layout: post
-title: 
-date:
-categories: []
-tag: []
+title: Gradient Boosting Tree에 대한 자세한 설명 
+date: 2020-08-30
+categories: [ML]
+tag: [tree algorithm,supervised-learning, boosting, gbm]
 comments: true
+photos:
+    - "../../images/tree-titleimage.jpg"
+
 ---
+
+
+
+
 
 https://brunch.co.kr/@snobberys/137
 
