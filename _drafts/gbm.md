@@ -18,6 +18,7 @@ photos:
 ## Introduction
 
 
+
 ---
 ## Gradient Boosting Tree의 원리
 
