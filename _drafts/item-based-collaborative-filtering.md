@@ -1,24 +1,24 @@
 ---
 layout: post
-title: "추천시스템: 아이템 기반 협업 필터링으로 영화 추천하기"
+title: "추천 시스템 (1): 아이템 기반 협업 필터링으로 영화 추천하기"
 date: 2020-09-02
 categories: []
 tag: []
 comments: true
 ---
 
+* 이번 포스팅에서는 추천 시스템 중 아이템 기반의 협업 필터링에 대해 설명하고, MovieLens 데이터를 통해 손코딩 + Surprise 패키지를 통해 아이템 기반 협업 필터링에 대해 실습해보고자 합니다.
+* (요즘 글쓰는 순서가 뒤죽박죽이네요... **시리즈 글**을 이어서 쓰는 건 참 어려운 것 같습니다. 끌리는대로! 씁니다 ㅎㅎ) 
 
 ---
-## 추천 시스템 개요
+## 추천 시스템 (Recommendation System) 개요
 
-아이템 기반 협업 필터링에 들어가기 앞서 
 
----
-### User-Item Matrix
+
 
 
 ---
-### 추천 시스템 (Recommendation System)의 방식
+### 추천 시스템 (Recommendation System)의 유형
 
 추천시스템은
 * 콘텐츠 기반 필터링 (Contents based Filtering): 사용자가 특정 아이템을 매우 선호할 때, 그 아이템과 비슷한 콘텐츠를 가진 다른 아이템을 추천
