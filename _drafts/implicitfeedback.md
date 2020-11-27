@@ -81,30 +81,175 @@ $U$와 $V$행렬을 풀기 위해서는 SVD (매우 큰 행렬의 역행렬을 �
 이 연산이 끝나면 단지 $U$와 $V$를 곱해 특정한 유저/아이템 상호작용에 대한 평점을 예측할 수 있습니다. 이것이 Hu, Koren, and Volinsky의 [Collaborative Filtering for Implicit Feedback Datasets](http://yifanhu.net/PUB/cf.pdf)의 방법입니다. 이제 이 논문에서 사용된 방법을 실제 데이터에 적용해보고, 추천 시스템을 구축해보겠습니다.
 
 ---
-## 데이터 처리하기
+## 데이터 설명
 
-예시에 사용할 데이터는 UCI Machine Learning repository에서 가져왔습니다. 이 데이터셋은 "Online Retail"이라 불리고, [여기](https://archive.ics.uci.edu/ml/datasets/Online+Retail)에서 찾을 수 있습니다. 설명에서 알 수 있듯이, 이 데이터는 영국에 있는 온라인 소매 기업에서 8개월 간의 구매 기록을 담고 있습니다.
+예시에 사용할 데이터는 UCI Machine Learning repository에서 가져왔습니다. 이 데이터셋은 "Online Retail"이라 불리고, [여기](https://archive.ics.uci.edu/ml/datasets/Online+Retail)에서 찾을 수 있습니다. 설명에서 알 수 있듯이, 이 데이터는 영국에 있는 온라인 소매 기업에서 가져온 8개월 간의 구매 기록을 담고 있습니다.
 
-ALS에 쓸 수 있는 포맷으로 데이터를 변형하는 일들이 필요합니다. 즉, 유니크한 고객 ID를 행렬의 행으로, 유니크한 아이템 ID를 행렬의 열로 만들어야 합니다. 행렬의 값은 각 유저가 각 아이템을 구매한 총 횟수입니다.
-
-먼저, 전처리에 필요한 라이브러리를 불러오겠습니다.
+먼저 필요한 라이브러리를 불러오겠습니다.
 
 ```python
 import pandas as pd
 import scipy.sparse as sparse
 import numpy as np
 from scipy.sparse.linalg import spsolve
-```
+import random
 
-이제 데이터를 불러와서 살펴봅시다.
-
-```python
 website_url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/00352/Online%20Retail.xlsx'
 retail_data = pd.read_excel(website_url)
 retail_data.head()
 ```
 
 ![](../../images/implicit_retail.png)
+
+
+해당 데이터는 구매 목록에 대한 송장 번호 (Invoice), 아이템 ID (StockCode), 아이템에 대한 설명 (Description), 구매 횟수 (Quantity), 구매 일자 (InvoiceDate), 구매 가격 (UnitPrice), 고객 ID (CustomerID), 고객의 국적 (Country) 컬럼으로 이루어져 있습니다.
+
+---
+## 데이터 전처리
+
+먼저, 결측치가 있는지 확인하겠습니다.
+
+```python
+retail_data.info
+```
+![](../../images/implicit_info.png)
+
+대부분의 컬럼에는 결측치가 없지만 CustomerID에 결측치가 좀 있군요. CustomerID가 결측이면 누가 어떤 항목을 샀는지 모르기 때문에 결측치를 제거해야 합니다.
+
+```python
+# 1. CustomerID가 NA인 것을 지워줌
+cleaned_retail = retail_data[retail_data['CustomerID'].notna()]
+cleaned_retail.info() # 총 406,829행
+```
+
+결측을 제거하니 406,829행이 되었습니다.
+
+다음은 아이템 ID에 따른 아이템 설명 테이블 `item_lookup`을 만듭니다. 이 테이블을 만드는 이유는 ~~ 입니다.
+
+```python
+item_lookup = cleaned_retail[['StockCode','Description']].drop_duplicates()
+item_lookup['StockCode'] = item_lookup['StockCode'].astype(str)
+item_lookup.head()
+```
+
+ALS 알고리즘의 입력값 형태를 만드려면 데이터를 변형해야 합니다. 이를 위해 유니크한 고객 ID를 행렬의 행으로, 유니크한 아이템 ID를 행렬의 열로 만듭니다. 행렬의 값은 각 유저가 각 아이템을 구매한 총 횟수입니다. 이런 행렬을 **희소 행렬 (Sparse Matrix)**라 합니다.
+
+```python
+# matrix가 매우 크기 때문에 Sparse matrix로 바꾸어주어서
+# zero가 아닌 값들의 위치와 그 값만 저장하도록 메모리 절약!
+cleaned_retail['CustomerID'] = cleaned_retail['CustomerID'].astype(int)
+# 1. 고객 ID, 아이템 ID, 구매량만 가져옴
+cleaned_retail = cleaned_retail[['CustomerID','StockCode','Quantity']]
+# 2. 고객과 아이템 별로 총 얼마나 구매했는지 
+grouped_cleaned = cleaned_retail.groupby(['CustomerID','StockCode']).sum().reset_index()
+
+# 3. 구매 수량 (Quantity)가 0인 데이터는 고객이 구매했으나 환불한 경우이기 때문에 구매 카운트로 쳐줘서 1로 바꿔줌
+grouped_cleaned[grouped_cleaned['Quantity']==0] = 1
+
+# 4. 구매한 애들만 뽑기
+grouped_purchased = grouped_cleaned[grouped_cleaned['Quantity']>0]
+
+grouped_purchased.head(5)
+```
+
+![](../../images/implicit_purchased.png)
+
+`grouped_purchased` 테이블을 보면 고객 별로 특정 StockCode를 가진 항목들을 8개월 동안 얼마나 구매했는지를 Long Table 형태로 보여줍니다.
+
+이제 이를 행은 고객 ID, 열은 아이템 ID (StockCode)로 두고 구매 수량 (Quantity)을 행렬 값으로 두는 희소 행렬을 만듭니다.
+
+```python
+customers = list(np.sort(grouped_purchased['CustomerID'].unique()))
+products = list (grouped_purchased['StockCode'].unique())
+quantity = list(grouped_purchased['Quantity'])
+
+rows = grouped_purchased['CustomerID'].astype('category').cat.codes
+cols = grouped_purchased['StockCode'].astype('category').cat.codes
+
+print(len(customers)) # 4327
+print(len(products))  # 3650
+
+# csr: Compressed Sparse matrix by Row
+purchase_sparse = sparse.csr_matrix((quantity, (rows, cols)), shape = (len(customers),len(products)))
+purchase_sparse #4327 * 3650 행렬
+```
+`purchase_sparse` 행렬은 4,327명의 고객과 3,650개의 아이템으로 이루어져 있습니다. 이런 유저/ 아이템 간 상호작용은 265,221개에 달합니다. 이렇게 만든 희소 행렬이 얼마나 비었는지 보기 위해 희소성 (Sparsity)를 계산할 수 있습니다. 이는 행렬에 얼마나 0 값이 많은지를 보여줍니다.
+
+```python
+# Sparsity: 얼마나 비어있나?
+matrix_size = purchase_sparse.shape[0]* purchase_sparse.shape[1]
+num_purchases = len(purchase_sparse.nonzero()[0])
+sparsity = 100 * (1 - (num_purchases / matrix_size))
+sparsity
+> 98.3207
+```
+
+상호작용 행렬의 98.3%이 비어있습니다. 협업 필터링을 구축하기 위해서 필요한 희소성은 약 99.5%까지 가능합니다. 저희가 구한 희소행렬은 98.3%이니까 협업 필터링을 무난하게 구축할 수 있습니다.
+
+---
+## Train, Validation 세트 만들기
+
+일반적인 머신러닝에서는 훈련 데이터로 만든 모형이 얼마나 새로운 데이터에 잘 작동하는지 테스트해야 합니다. 훈련 데이터로부터 테스트 데이터를 따로 만들어서 할 수 있죠.
+
+그러나 협업 필터링에서는 적절한 행렬 분해 (matrix factorization)을 하기 위해서 **모든** 유저/아이템 상호작용 데이터를 사용해야 합니다. 결과적으로 모형을 훈련시킬 때 일정한 확률로 랜덤하게 뽑힌 유저/아이템 상호작용을 숨겨야 합니다. 이후, 테스트 단계에서는 얼마나 유저가 실제로 추천된 아이템을 구매했는지 파악할 수 있습니다. 이상적으로는 A/B 테스트를 통해 추천 효과를 검증할 수 있습니다.
+
+그럼 어떻게 일정한 확률로 데이터를 숨길 수 있을까요?
+
+![](../../images/implict_train.png)
+
+우리의 테스트 데이터는 원본 데이터의 복사본입니다. 그러나, 훈련 데이터는 랜덤하게 일정한 확률로유저/아이템 상호작용 몇 개를 가려 고객이 그 아이템을 구매한 적이 없는 것처럼 만듭니다 (= 몇 개의 구매 수량을 0으로 채워넣습니다). 이 후 테스트 데이터에서 얼마나 유저가 실제 구매한 아이템이 추천됐는지 파악할 수 있습니다. 만약 유저가 추천된 아이템을 실제 구매한 경우가 많을 경우 추천 시스템이 제대로 작동한다 말할 수 있겠죠!
+
+자 이제 훈련 데이터를 만들어 봅시다.
+
+```python
+def make_train (matrix, percentage = .2):
+    '''
+    -----------------------------------------------------
+    설명
+    유저-아이템 행렬 (matrix)에서 
+    1. 0 이상의 값을 가지면 1의 값을 갖도록 binary하게 테스트 데이터를 만들고
+    2. 훈련 데이터는 원본 행렬에서 percentage 비율만큼 0으로 바뀜
+    
+    -----------------------------------------------------
+    반환
+    training_set: 훈련 데이터에서 percentage 비율만큼 0으로 바뀐 행렬
+    test_set:     원본 유저-아이템 행렬의 복사본
+    user_inds:    훈련 데이터에서 0으로 바뀐 유저의 index
+    '''
+    test_set = matrix.copy()
+    test_set[test_set !=0] = 1 # binary하게 만들기
+    
+    training_set = matrix.copy()
+    nonzero_inds = training_set.nonzero()
+    nonzero_pairs = list(zip(nonzero_inds[0], nonzero_inds[1]))
+    
+    random.seed(0)
+    num_samples = int(np.ceil(percentage * len(nonzero_pairs)))
+    samples = random.sample (nonzero_pairs, num_samples)
+    
+    user_inds = [index[0] for index in samples]
+    item_inds = [index[1] for index in samples]
+    
+    training_set[user_inds, item_inds] = 0
+    training_set.eliminate_zeros()
+    
+    return training_set, test_set, list(set(user_inds))
+
+ product_train, product_test, product_users_altered = make_train(purchase_sparse, 0.2)
+```
+자 이제 Hu, Koren, Volinsky의 논문에서 쓰인 ALS (Alternating Least Squares)를 구현해볼 시간입니다.
+
+---
+## 암시적 피드백을 위한 ALS 알고리즘 구현하기
+[Collaborative Filtering for Implicit Feedback Datasets](http://yifanhu.net/PUB/cf.pdf)을 보면 ALS를 구현하기 위한 수식들을 보실 수 있습니다.
+
+먼저, 희소 평점 행렬 (저희가 만든 `product_train`행렬에 해당합니다)을 신뢰 행렬 (Confidence matrix)로 만들어야 합니다.
+
+$$
+C_{ui} = 1 + \alpha r_{ui}
+$$
+
+여기서 $C_{ui}$는 $u$번째 유저의 $i$번째 아이템에 대한 신뢰 행렬입니다. $\alpha$는 선호도 (저희 예시에서는 구매량)에 대한 스케일링 term이고 $r_{ui}$는 저희의 구매량에 대한 원본 행렬에 해당합니다. 논문에서는 $\alpha$에 대한 초기값으로 40을 제안합니다.
 
 
 
