@@ -583,8 +583,8 @@ def rec_items(customer_id, mf_train, user_vecs, item_vecs, customer_list, item_l
 이 둘을 비교해보면 12361 id를 가진 유저는 식기 세트 (cutlery set)를 많이 구매했는데, 추천 목록에서는 아직 구매하지 않은 핑크색, 빨간색 식기 세트를 추천하고 있습니다. 또한 가족 앨범을 위한 사진틀이 1순위로 추천됐는데 아마도 해당 유저가 구매한 아이템들이 가족을 가진 아내들이 많이 사는 아이템이지 않을까 싶습니다. 이처럼 추천 시스템이 보기에도 알맞게 추천되고 있음을 확인할 수 있습니다.
 
 
-이 글에서는 어떻게 암시적 피드백 데이터에서 추천 시스템이 작동하는지를 배웠습니다. 
-다음 글에서는 LightFM이라 불리는 파이썬 라이브러리를 이용한 추천 시스템에 대해 파볼 예정입니다.
+이 글에서는 어떻게 암시적 피드백 데이터에서 추천 시스템이 작동하는지를 배웠습니다. 전체 코드는 [여기](https://github.com/assaeunji/recommendation/blob/main/Implicit%20Feedback_OnlineRetail.ipynb)에서 확인하실 수 있습니다.
+다음 글에서는 LightFM이라 불리는 파이썬 라이브러리를 이용한 추천 시스템에 대해 파보려 합니다 :>
 
 ----
 ## References
