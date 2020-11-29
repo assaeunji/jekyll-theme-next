@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Implicit Feedback 추천 시스템에 대한 친절한 설명
-date: 2020-10-11
+date: 2020-11-29
 categories: [ML]
 tag: [recommender-system, ALS, implicit-feedback, ml, python, pyspark]
 comments: true
@@ -9,7 +9,7 @@ comments: true
 
 ![Jesse님께 허락을 받고 쓴 글 인증](../../images/jesse-allow.png)
 
-* 이 글은 Jessed님의 A Gentle Introduction to Recommender Systems with Implicit Feedback을 번역한 글입니다.
+* 이 글은 Jesse님의 A Gentle Introduction to Recommender Systems with Implicit Feedback을 번역한 글입니다.
 
 ---
 
@@ -93,6 +93,8 @@ import scipy.sparse as sparse
 import numpy as np
 from scipy.sparse.linalg import spsolve
 import random
+import implicit
+from sklearn.preprocessing import MinMaxScaler
 
 website_url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/00352/Online%20Retail.xlsx'
 retail_data = pd.read_excel(website_url)
@@ -275,8 +277,308 @@ $$
 저자들은 위의 식에서 컴퓨터 계산량을 줄일 수 있도록 선형대수를 이용해 다음과 같이 식을 바꾸어 계산하였습니다:
 
 $$
-x_u = (Y^\top Y + Y^)
+x_u = (Y^\top Y + Y^\top (C^u - I) Y + \lambda I)^{-1} Y^\top C^u p(u)
 $$
 
+마찬가지로 아이템 벡터 $y_i$를 계산하기 위한 식은 다음과 같습니다:
+
+$$
+y_i = (X^\top X + X^\top (C^i - I) X + \lambda I)^{-1} X^\top C^i p(i)
+$$
+
+위의 두 식은 수렴할 때까지 앞 뒤로 반복하게 됩니다. 또한 정규화 term인 $\lambda$과 선호 여부를 보여주는 선호 행렬 $p$ (구매가 있으면 1, 없으면 0의 값을 갖는 이진화된 행렬)는 훈련 단계에서 과적합되지 않도록 막아줍니다.
 
 
+```python
+def implicit_weighted_ALS(training_set, lambda_val =.1, alpha = 40, n_iter = 10, rank_size = 20, seed = 0):
+    '''
+    협업 필터링에 기반한 ALS
+    -----------------------------------------------------
+    input
+    1. training_set : m x n 행렬로, m은 유저 수, n은 아이템 수를 의미. csr 행렬 (희소 행렬) 형태여야 함 
+    2. lambda_val: ALS의 정규화 term. 이 값을 늘리면 bias는 늘지만 분산은 감소. default값은 0.1
+    3. alpha: 신뢰 행렬과 관련한 모수 (C_{ui} = 1 + alpha * r_{ui}). 이를 감소시키면 평점 간의 신뢰도의 다양성이 감소
+    4. n_iter: 반복 횟수
+    5. rank_size: 유저/ 아이템 특성 벡터의 잠재 특성의 개수. 논문에서는 20 ~ 200 사이를 추천하고 있음. 이를 늘리면 과적합 위험성이 있으나 
+    bias가 감소
+    6. seed: 난수 생성에 필요한 seed
+    -----------------------------------------------------
+    반환
+    유저와 아이템에 대한 특성 벡터
+    '''
+    
+    # 1. Confidence matrix
+    # C = 1+ alpha * r_{ui}
+    conf = (alpha*training_set) # sparse 행렬 형태를 유지하기 위해서 1을 나중에 더함
+    
+    num_user = conf.shape[0]
+    num_item = conf.shape[1]
+
+    # X와 Y 초기화
+    rstate = np.random.RandomState(seed)
+    X = sparse.csr_matrix(rstate.normal(size = (num_user, rank_size)))
+    Y = sparse.csr_matrix(rstate.normal(size = (num_item, rank_size)))
+    X_eye = sparse.eye(num_user)
+    Y_eye = sparse.eye(num_item)
+    
+    # 정규화 term: 𝝀I
+    lambda_eye = lambda_val * sparse.eye (rank_size)
+    
+    # 반복 시작
+    for i in range(n_iter):
+        yTy = Y.T.dot(Y)
+        xTx = X.T.dot(X)
+        
+        # Y를 고정해놓고 X에 대해 반복
+        # Xu = (yTy + yT(Cu-I)Y + 𝝀I)^{-1} yTCuPu
+        for u in range(num_user):
+            conf_samp = conf[u,:].toarray() # Cu
+            pref = conf_samp.copy()
+            pref[pref!=0] = 1
+            # Cu-I: 위에서 conf에 1을 더하지 않았으니까 I를 빼지 않음 
+            CuI = sparse.diags(conf_samp, [0])
+            # yT(Cu-I)Y
+            yTCuIY = Y.T.dot(CuI).dot(Y)
+            # yTCuPu
+            yTCupu = Y.T.dot(CuI+Y_eye).dot(pref.T)
+            
+            X[u] = spsolve(yTy + yTCuIY + lambda_eye, yTCupu)
+        
+        # X를 고정해놓고 Y에 대해 반복
+        # Yi = (xTx + xT(Cu-I)X + 𝝀I)^{-1} xTCiPi
+        for i in range(num_item):
+            conf_samp = conf[:,i].T.toarray()
+            pref = conf_samp.copy()
+            pref[pref!=0] = 1
+            
+            #Ci-I
+            CiI = sparse.diags (conf_samp, [0])
+            # xT(Ci-I)X
+            xTCiIX = X.T.dot(CiI).dot(X)
+            # xTCiPi
+            xTCiPi = X.T.dot(CiI+ X_eye).dot(pref.T)
+            
+            Y[i] = spsolve(xTx + xTCiIX + lambda_eye, xTCiPi)
+            
+        return X, Y.T
+```
+
+자 이제, 한 번의 반복으로 얼마나 걸리는지 봅시다. 20개의 잠재 특성, $\alpha =15$, $\lambda =0.1$로 했을 때 90초 정도 걸리네요.
+
+```python
+user_vecs, item_vecs = implicit_weighted_ALS(product_train, lambda_val = 0.1, alpha = 15, iterations = 1,rank_size = 20)
+```
+
+이제 특정한 유저의 예측된 평점을 구하려면 유저 벡터와 아이템 벡터의 내적곱을 하면 됩니다. 첫 번째 유저를 살펴봅시다.
+
+```python
+first = user_vecs[0].dot(item_vecs).toarray() # 1x3650
+first[0,:5]```
+```
+
+```python
+array([0.19375569, 0.05482773, 0.00230204, 0.01303025, 0.04740501])
+```
+이 값은 첫 번째 유저의 3,664개 중 첫 5개 아이템에 대한 평점입니다. 첫 번째 유저는 이 다섯 개중에 첫번째 상품을 가장 높게 평가했네요. 그러나, 한 번만 반복한 결과이기 때문에 여러 번 반복하려면 더 성능이 좋은 코드가 필요할 것 같군요.
+
+---
+## 빠르게 ALS 구현하기
+
+위의 코드는 반복문이 있어서 병렬적으로 유저와 아이템 벡터를 각각 처리하기 어렵습니다. 대신 `implicit`라이브러리를 이용하면 Cython과 OpenMP를 이용해 병렬적으로 모형을 처리할 수 있기 때문에 훨씬 빠르게 ALS를 구현할 수 있습니다.
+
+```python
+import implicit
+```
+
+이 라이브러리에서는 $\alpha$에 대한 input이 지정되어 있지 않기 때문에, 훈련 데이터에 $\alpha$를 곱한 신뢰 행렬 자체를 input으로 지정합니다. 또한 행렬의 형태를 `double`로 지정해야 합니다.
+
+```
+alpha = 15
+user_vecs, item_vecs = implicit.alternating_least_squares((product_train*alpha).astype('double')
+                                                          , factors=20
+                                                          , regularization = 0.1
+                                                          , iterations = 50)
+predictions = [sparse.csr_matrix(user_vecs), sparse.csr_matrix(item_vecs.T)]
+```
+
+훨씬 빠르게 모형이 적합됨을 확인할 수 있었습니다. 이제 모든 유저와 아이템에 대한 평점이 계산됐습니다. 그러면 어떻게 이 모형이 잘 적합됐는지 알까요?
+
+---
+## 추천 시스템 평가하기
+
+훈련 데이터 중 20%는 가려졌다는 사실을 기억하시나요? 이 걸 이용해서 추천 시스템의 성능을 평가할 것입니다. 결과적으로 유저마다 예측 평점이 높은 아이템 (추천할 아이템)이 실제로 구매한 아이템인지를 보아야 합니다. 흔히 쓰이는 지표는 ROC 커브입니다. ROC 커브 밑에 차지하는 면적이 넓을수록 추천할 아이템과 실제 구매한 아이템이 비슷함을 의미합니다. 이 면적을 AUC (Area Under the Curve)라 부릅니다.
+
+이를 위해서 가려진 정보가 있는 아이템을 가진 유저마다 AUC를 구하는 함수가 필요합니다. 또한 추천 시스템과 비교하기 위해서 가장 인기있는 아이템을 기반으로 추천했을 때 AUC는 어떤지도 계산할 것입니다.
+
+```python
+from sklearn import metrics
+
+def auc_score (test, predictions):
+    '''
+    fpr, tpr를 이용해서 AUC를 계산하는 함수
+    '''
+    fpr, tpr, thresholds = metrics.roc_curve(test, predictions)
+    return metrics.auc(fpr,tpr)
+```
+
+자 이제 이 `auc_score`함수를 helper 함수로 써서 가려진 유저들의 AUC를 계산할 것입니다.
+
+```python
+def calc_mean_auc(training_set, altered_users, predictions, test_set):
+    '''
+    가려진 정보가 있는 유저마다 AUC 평균을 구하는 함수
+    ----------------------------------------
+    input
+    1. training_set: make_train 함수에서 만들어진 훈련 데이터 (일정 비율로 아이템 구매량이 0으로 가려진 데이터)
+    2. prediction: implicit MF에서 나온 유저/아이템 별로 나온 예측 평점 행렬
+    3. altered_users: make_train 함수에서 아이템 구매량이 0으로 가려진 유저
+    4. test_set: make_train함수에서 만든 테스트 데이터
+    ----------------------------------------
+    반환
+    추천시스템 유저의 평균 auc
+    인기아이템 기반 유저 평균 auc
+    '''
+    # 리스트 초기화
+    store_auc = []
+    popularity_auc = []
+    
+    pop_items = np.array(test_set.sum(axis = 0)).reshape(-1) # 모든 유저의 아이템별 구매횟수 합
+    item_vecs = predictions[1] # 아이템 latent 벡터
+    
+    for user in altered_users:
+        training_row = training_set[user,:].toarray().reshape(-1) # 유저의 훈련데이터
+        zero_inds = np.where(training_row == 0) # 가려진 아이템 Index
+        
+        # 가려진 아이템에 대한 예측
+        user_vec = predictions[0][user,:]
+        pred = user_vec.dot(item_vecs).toarray()[0,zero_inds].reshape(-1)
+        
+        # 가려진 아이템에 대한 실제값
+        actual = test_set[user,:].toarray()[0,zero_inds].reshape(-1) 
+        
+        # 가려진 아이템에 대한 popularity (구매횟수 합)
+        pop = pop_items[zero_inds]
+        
+        # AUC 계산 
+        store_auc.append(auc_score(actual, pred))
+        popularity_auc.append(auc_score(actual,pop))
+    
+    return float('%.3f'%np.mean(store_auc)), float('%.3f'%np.mean(popularity_auc))  
+```
+
+```python
+(0.869, 0.814)
+```
+
+위의 코드 결과를 통해 우리의 추천 시스템이 가장 인기있는 아이템 기반 알고리즘보다 나은 성능을 낸다는 것을 알았습니다. ALS 기반 추천 시스템은 평균 0.87의 AUC를 갖는 반면, 인기있는 아이템 기반 알고리즘은 그보다 낮은 0.814의 AUC를 갖습니다. 위에서 정한 모수들을 바꿔가면서 더 높은 AUC를 가질 수 있는지 조정할 수 있습니다. 이상적으로는 교차 검증을 통해서 어떤 모수가 가장 좋은지 파악할 수 있습니다.
+
+---
+## 추천하기
+
+이제 인기 기반 추천보다 ALS 기반 추천이 더 나은 성능을 낸다는 것을 알았습니다. 이제 어떻게 특정한 유저에게 추천이 되는지 확인해봅시다.
+
+먼저, 훈련 데이터에서 유저가 이미 구매한 아이템이 무엇인지 파악해야 합니다. 이를 위해 `get_items_purchased 함수를 이용합니다.
+
+```python
+def get_items_purchased(customer_id, mf_train, customer_list, products_list, item_lookup):
+    '''
+    특정 유저가 구매한 목록을 보여주는 함수
+
+    INPUT
+    1. customer_id: 고객 ID
+    2. mf_train: 훈련 데이터 평점
+    3. customers_list: 훈련 데이터에 쓰인 고객 목록
+    4. products_list: 훈련 데이터에 쓰인 아이템 목록
+    5. item_lookup: 유니크한 아이템 ID와 설명을 담은 테이블
+    '''
+    cust_ind = np.where (customer_list == customer_id)[0][0]
+    purchased_ind = mf_train[cust_ind,:].nonzero()[1]
+    prod_codes = products_list[purchased_ind]
+    
+    return item_lookup.loc[item_lookup.StockCode.isin(prod_codes)]
+```
+
+```python
+get_items_purchased(12347, product_train, customers_arr, products_arr, item_lookup)
+```
+![](../../images/implicit_example.png)
+
+위의 결과에 따르면 12347의 고객 ID를 가진 고객은 총 98개의 아이템을 구매했습니다.
+
+마지막으로, 구매하지 않은 아이템 중 추천할 아이템을 뽑는 함수 `rec_items`를 사용합니다.
+
+```python
+def rec_items(customer_id, mf_train, user_vecs, item_vecs, customer_list, item_list, item_lookup, num_items = 10):
+    '''
+    유저의 추천 아이템 반환
+    -----------------------------------------------------
+    INPUT
+    1. customer_id - Input the customer's id number that you want to get recommendations for
+    2. mf_train: 훈련 데이터
+    3. user_vecs: 행렬 분해에 쓰인 유저 벡터
+    4. item_vecs: 행렬 분해에 쓰인 아이템 벡터
+    5. customer_list: 평점 행렬의 행에 해당하는 고객 ID
+    6. item_list: 평점 행렬의 열에 해당하는 아이템 ID
+    7. item_lookup: 아이템 ID와 설명을 담은 테이블
+    8. num_items: 추천할 아이템 개수
+    -----------------------------------------------------
+    반환    
+    구매한 적이 없는 아이템 중 예측 평점이 높은 최고 n개의 추천 아이템
+    '''
+    
+    cust_ind = np.where(customer_list == customer_id)[0][0]
+    pref_vec = mf_train[cust_ind,:].toarray()                   # 훈련 데이터의 실제 평점
+    pref_vec = pref_vec.reshape(-1) + 1                         # 1을 더해서 환불한 것도 구매한 걸로 간주
+    pref_vec[pref_vec > 1] = 0                                  # 구매한 것들을 모두 0으로 
+    rec_vector = user_vecs[cust_ind,:].dot(item_vecs.T)         # 추천 시스템에 기반한 예측 평점
+    
+    # Min-Max Scaling
+    min_max = MinMaxScaler()
+    rec_vector_scaled = min_max.fit_transform(rec_vector.reshape(-1,1))[:,0] 
+    recommend_vector = pref_vec*rec_vector_scaled  # 구매하지 않은 아이템에 대해서만 예측 평점이 남도록
+    
+    product_idx = np.argsort(recommend_vector)[::-1][:num_items] # num_items만큼 내림차순으로 평점 정렬한 index
+    
+    rec_list = []
+    
+    for index in product_idx:
+        code = item_list[index] # 아이템 id
+        # id와 description 담기
+        rec_list.append([code, item_lookup['Description'].loc[item_lookup['StockCode'] == code].iloc[0]]) 
+    
+    codes = [item[0] for item in rec_list]
+    descriptions = [item[1] for item in rec_list]
+    final_frame = pd.DataFrame({'StockCode': codes, 'Description': descriptions})
+    
+    return final_frame[['StockCode', 'Description']]
+```
+
+예를 들어 고객 ID가 12363인 유저의 실제 구매목록과 추천된 아이템을 비교하면 다음과 같습니다.
+
+* 실제 구매 목록: 식기 세트, 종이 접시, 물병 가방, 크리스마스 관련 물품, 캔들, 열쇠고리 등
+
+    ```python
+    get_items_purchased(12361, product_train, customers_arr, products_arr, item_lookup)
+    ```
+    ![](../../images/implicit_purchased.png)
+
+* 추천 아이템: 가족 앨범 사진틀, 핑크 식기 세트, 펠트 가방 키트, 캔들, 사진틀 등
+
+    ```python
+    rec_items(12361, product_train, user_vecs, item_vecs, customers_arr, products_arr, item_lookup, num_items = 10)
+    ```
+
+    ![](../../images/implicit_recommend.png)
+
+
+이 둘을 비교해보면 12361 id를 가진 유저는 식기 세트 (cutlery set)를 많이 구매했는데, 추천 목록에서는 아직 구매하지 않은 핑크색, 빨간색 식기 세트를 추천하고 있습니다. 또한 가족 앨범을 위한 사진틀이 1순위로 추천됐는데 아마도 해당 유저가 구매한 아이템들이 가족을 가진 아내들이 많이 사는 아이템이지 않을까 싶습니다. 이처럼 추천 시스템이 보기에도 알맞게 추천되고 있음을 확인할 수 있습니다.
+
+
+이 글에서는 어떻게 암시적 피드백 데이터에서 추천 시스템이 작동하는지를 배웠습니다. 
+다음 글에서는 LightFM이라 불리는 파이썬 라이브러리를 이용한 추천 시스템에 대해 파볼 예정입니다.
+
+----
+## References
+
+* Jesse Steinweg-Woods, "A Gentle Introduction to Recommender Systems with Implicit Feedback" [`[link]`](https://jessesw.com/Rec-System/)
+* Hu, Koren, and Volinsky, "Collaborative Filtering for Implicit Feedback Datasets" [`[link]`](http://yifanhu.net/PUB/cf.pdf)
