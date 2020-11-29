@@ -9,7 +9,7 @@ comments: true
 
 ![Jesse님께 허락을 받고 쓴 글 인증](../../images/jesse-allow.png)
 
-* 이 글은 Jesse님의 A Gentle Introduction to Recommender Systems with Implicit Feedback을 번역한 글입니다.
+* 이 글은 Jesse님의 허락을 받고 A Gentle Introduction to Recommender Systems with Implicit Feedback [`[link]`](https://jessesw.com/Rec-System/)을 번역한 글입니다.
 
 ---
 ## 추천 시스템 소개
