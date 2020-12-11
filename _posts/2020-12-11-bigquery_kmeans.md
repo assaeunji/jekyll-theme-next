@@ -224,7 +224,6 @@ group by station_name
 이제 데이터를 살펴봤으니 다음 단계는 k-평균 모델을 만드는 것입니다.
 
 `create model` 문을 model_type = 'kmeans'`라는 옵션과 함께 사용해 k-평균 모델을 만들고 학습시킬 수 있습니다. 
-
 다음 쿼리는 `create model` 문을 이전 쿼리에 추가하고 데이터에서 id 필드를 삭제합니다.
 
 ```sql
@@ -271,7 +270,8 @@ create or replace model
 
 두번째로 `stationstats`를 정의할 때 group by 절에 `isweekday`라는 변수를 넣고, select 절에 `except (station_name, isweekday)`를 추가했습니다.
 
-* 이렇게 한 이유는 추측상 일단 주중/ 주말마다 대여 시간이나 횟수가 차이가 나기 때문에 정거장 & 주중/주말 별로 어떻게 클러스터링이 되는지를 보고자 한 것 같습니다. * 또한 `except(컬럼명)`을 쓰면 해당 컬럼만 제외하고 불러오는 것을 의미합니다. k-평균에 들어갈 변수는 3개 (duration, num_trips, distance_from_city_center)이기 때문에 이 station_name, isweekday 두 컬럼은 제외하고 불러오는 것입니다.
+* 이렇게 한 이유는 추측상 일단 주중/ 주말마다 대여 시간이나 횟수가 차이가 나기 때문에 정거장 & 주중/주말 별로 어떻게 클러스터링이 되는지를 보고자 한 것 같습니다. 
+* 또한 `except(컬럼명)`을 쓰면 해당 컬럼만 제외하고 불러오는 것을 의미합니다. k-평균에 들어갈 변수는 3개 (duration, num_trips, distance_from_city_center)이기 때문에 이 station_name, isweekday 두 컬럼은 제외하고 불러오는 것입니다.
 
 쿼리가 완료되면 다음과 같은 안내문이 뜹니다. 그럼 옆의 **모델로 이동**버튼을 클릭해봅니다.
 
