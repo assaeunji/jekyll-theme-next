@@ -76,14 +76,14 @@ BigQuery로 K-평균 클러스터링 모델을 만드려면 이전에 모델을 
 * 도심에서의 거리
 
 `london_bicycles` 데이터세트는 두 개의 테이블을 가지고 있습니다. 아래 그림처럼 해당 테이블의 스키마를 클릭하면 어떤 열을 갖고 있는 테이블인지 알 수 있습니다.
-* cycle_hire: 대여할 때마다 기록되는 대여 정보 테이블입니다. 대여 ID (rental_id)와 자전거 ID(bike_ID)로 key를 갖고 있고, 각 대여 건마다 대여 시간 (duration), 
+* `cycle_hire`: 대여할 때마다 기록되는 대여 정보 테이블입니다. 대여 ID (`rental_id`)와 자전거 ID(`bike_ID`)로 key를 갖고 있고, 각 대여 건마다 대여 시간 (`duration`), 
 출발점과 종착점의 정보들이 나와있습니다.
     ![](../../images/bigquery_cyclehire.png)
 
-* cycle_stations: 자전거 대여소에 대한 정보를 담고 있는 테이블입니다. 대여소 ID (id)의 위도 (latitude), 경도 (longitude), 자전거 보유 현황 (bikes_count) 등의 정보를 담고 있네요.
+* `cycle_stations`: 자전거 대여소에 대한 정보를 담고 있는 테이블입니다. 대여소 ID (id)의 위도 (`latitude`), 경도 (`longitude`), 자전거 보유 현황 (`bikes_count`) 등의 정보를 담고 있네요.
     ![](../../images/bigquery_cyclestations.png)
 
-* 이 두 테이블에 JOIN KEY가 되는 건 cycle_stations의 대여소 ID와 cycle_hire의 출발점 혹은 종착점 id가 됩니다.
+* 이 두 테이블에 JOIN KEY가 되는 건 `cycle_stations의` 대여소 ID와 `cycle_hire의` 출발점 혹은 종착점 id가 됩니다.
 
 ---
 ## 클러스터링에 사용할 변수 집계하기
@@ -163,9 +163,7 @@ order by distance_from_city_center
 
 위 코드는 이중 서브 쿼리 때문에 가독성이 떨어집니다. 그래서 `with`문을 이용해서 서브쿼리를 위에서 먼저 정의해주는 것이죠~!
 
-자, 그럼 각 임시 테이블을 생성하는 쿼리에 대해 알아봅시다.
-
-먼저 `hs`라는 테이블을 만드는 쿼리는 다음과 같습니다.
+자, 그럼 각 임시 테이블을 생성하는 쿼리에 대해 알아봅시다. 먼저 `hs`라는 테이블을 만드는 쿼리는 다음과 같습니다.
 
 ```sql
   select 
@@ -190,15 +188,14 @@ order by distance_from_city_center
 * 첫 번째 컬럼은 공통이 되는 정거장 이름 (`station_name`)입니다.
 * 두 번째 컬럼은 주중/ 주말을 구분하는 `isweekday`라는 컬럼입니다. `cycle_hire`의 대여 시작 시간에서 요일을 추출해서 7 (토요일), 1 (일요일)의 값을 가지면 "weekend" (주말)라는 값을 갖고, 그 외 주중이라면 "weekday" (주중)이라는 값을 갖도록 합니다.
 * 세 번째 컬럼은 `cycle_hire`의 대여 시간을 나타내는 `duration` 컬럼입니다.
-* 네 번째 컬럼은 도시에서의 거리를 나타내는 `distnace_from_city_center` 컬럼인데요. 먼저 `st_geogpoint(경도, 위도)`라는 (BigQuery의 지리 함수)[https://cloud.google.com/bigquery/docs/reference/standard-sql/geography_functions?hl=ko]를 이용해서 해당 대여소의 위치를 반환해주고, `st_geogpoint(-0.1, 51.5)`라는 지점과 대여소 간의 거리를 계산해주는 `st_distance (지역1, 지역2)` 함수를 사용합니다. 이 함수는 두 지역 간의 최단 거리를 미터 단위로 계산해줍니다. 따라서 이를 1000으로 나눠서 **킬로미터 단위**로 만든 것이 해당 컬럼입니다. 여담으로 st_geogpoint(-0.1, 51.5)에 해당하는 지역이 어딜까 구글 지도에서 찍어보니 **사우스워크 영국 런던**라는 곳이 찍히네요!
+* 네 번째 컬럼은 도시에서의 거리를 나타내는 `distnace_from_city_center` 컬럼인데요. 먼저 `st_geogpoint(경도, 위도)`라는 [BigQuery의 지리 함수](https://cloud.google.com/bigquery/docs/reference/standard-sql/geography_functions?hl=ko)를 이용해서 해당 대여소의 위치를 반환해주고, `st_geogpoint(-0.1, 51.5)`라는 지점과 대여소 간의 거리를 계산해주는 `st_distance (지역1, 지역2)` 함수를 사용합니다. 이 함수는 두 지역 간의 최단 거리를 미터 단위로 계산해줍니다. 따라서 이를 1000으로 나눠서 **킬로미터 단위**로 만든 것이 해당 컬럼입니다. 여담으로 st_geogpoint(-0.1, 51.5)에 해당하는 지역이 어딜까 구글 지도에서 찍어보니 **사우스워크 영국 런던**라는 곳이 찍히네요!
     ![](../../images/bigquery_googlemap.png)
 
 이에 해당하는 쿼리만 실행하면 `hs`테이블의 형태를 볼 수 있습니다.
 
 ![](../../images/bigquery_hs.png)
 
-자, 다음은 `hs`에서 2015년 한 해 동안 대여소 정보를 가져왔습니다. 대여를 할 때마다 행이 생성되기 때문에, 이를 대여소마다 한 행만 남도록 집계해주는 테이블이 필요합니다.
-이를 `stationstats`라는 임시테이블에서 집계합니다.
+자, 그럼 `hs`에서 2015년 한 해 동안의 대여소 정보를 가져왔습니다. 대여를 할 때마다 행이 생성되기 때문에, 이를 대여소마다 한 행만 남도록 집계해주는 테이블이 필요합니다. 이를 `stationstats`라는 임시테이블에서 집계합니다.
 
 ```sql
 select 
@@ -212,10 +209,10 @@ group by station_name
 
 이 쿼리를 실행하면 `hs`가 저장된 테이블이 아니라 임시 테이블이다 보니 오류가 생깁니다. 따라서 위에서 소개한 쿼리 전체를 한꺼번에 돌려야 오류를 방지할 수 있습니다. 일단 편의를 위해 해당 쿼리로만 설명을 드리겠습니다.
 
-* `hs`테이블에서 대여소 (station_name)이름 별로 group by를 합니다. 이를 통해 대여소마다 한 행만 남도록 집계할 수 있습니다.
+* `hs` 테이블에서 대여소 (`station_name`) 이름별로 group by를 합니다. 이를 통해 대여소마다 한 행만 남도록 집계할 수 있습니다.
 * 두번째 컬럼 `avg(duration)`는 대여소 별 평균 대여 시간을 의미합니다.
 * 세번째 컬럼 `count(duration)`는 대여소 별 1년 간 총 대여 횟수를 의미합니다.
-* 두번째 컬럼 `max(distance_from_city_center)`는 대여소에서 시내에서 떨어진 거리의 최댓값입니다. 어차피 대여소의 위치와 도시의 위치는 정해져있으니 max를 쓰든 min을 쓰든 같은 값이 도출됩니다. 그럼 굳이 왜 max()를 쓰느냐? group by 절에 지정하지 않은 컬럼을 출력하고 싶다면, 어떻게든 집계 함수를 통해 표현해야하기 때문입니다.
+* 두번째 컬럼 `max(distance_from_city_center)`는 대여소에서 시내에서 떨어진 거리의 최댓값입니다. 어차피 대여소의 위치와 도시의 위치는 정해져있으니 `max`를 쓰든 `min`을 쓰든 같은 값이 도출됩니다. 그럼 굳이 왜 `max`를 쓰느냐? group by 절에 지정하지 않은 컬럼을 출력하고 싶다면, 어떻게든 집계 함수를 통해 표현해야하기 때문입니다.
 
 이렇게 도출된 테이블은 다음과 같습니다.
 
@@ -363,7 +360,6 @@ from ml.predict(
 ---
 ## 삭제
 이 가이드에서 사용한 리소스 비용이 GCP 계정에 청구되지 않도록 데이터세트를 삭제하는 것이 좋습니다.
-
 이를 위해 다시 탐색기에 들어가 해당 데이터세트를 클릭하고 우측에 있는 **데이터세트 삭제**를 클릭하면 데이터가 삭제됩니다.
 
 ![](../../images/bigquery_delete.png)
