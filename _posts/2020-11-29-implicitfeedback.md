@@ -65,8 +65,9 @@ comments: true
 더 많은 데이터가 더 좋은 모형을 의미하기 때문에, 암시적 피드백 데이터를 구축하는데 힘써야한다는 것입니다. 암시적 피드백 데이터를 이용한 협업 필터링에는 많은 방법들이 있지만, 이 글에서는 Spark의 implicit 라이브러리에서 쓰는 방법인 ALS (Alternative Least Squares)에 대해 서술하겠습니다.
 
 ---
-## Alternative Least Squares
+## ALS (Alternative Least Squares)
 
+ALS은 암시적 피드백 데이터를 협업 필터링을 통해 추천 시스템을 구현하기 위한 알고리즘입니다.
 본격적으로 예시에 들어가기 전에, 이 방법이 어떻게 작동하는지 직관적으로 설명하고 왜 스파크에서 유일하게 선택되었는지 설명하고자 합니다. 앞에서 협업 필터링은 유저나 아이템에 대한 정보를 전혀 이용하지 않는다고 말했습니다. 그러면 어떻게 유저와 아이템이 서로 연관있다고 정의할 수 있을까요?
 
 정답은 **행렬 분해 (Matrix Factorization)**입니다. 행렬 분해는 차원 축소 (관련한 정보는 남기되 피처의 개수를 줄이고 싶을 때)에서 자주 사용되는 방법입니다. 이는 주성분 분석<sup>PCA; Principal Component Analysis</sup>과 고유값 분해 <sup>SVD; Singular Value Decomposition</sup>과 일맥상통하죠.
@@ -81,7 +82,10 @@ ALS의 행렬 분해의 핵심은
 ![](../../images/als_matrix.png)
 
 $U$와 $V$행렬을 풀기 위해서는 SVD를 사용하거나, 이를 근사한 ALS를 적용할 수 있습니다. SVD는 매우 큰 행렬의 역행렬을 구해야하기 때문에 컴퓨터 연산이 복잡한 반면,
-ALS는 한 번에 한 특징 벡터 (feature vector)만 추출하기만 하면 되기 때문에 병렬적으로 빠르게 처리할 수 있습니다. 그렇기 때문에 스파크에서 이 방법을 사용한 큰 이유라 생각합니다. 이를 위해 먼저, $U$를 랜덤하게 초기화하고 $V$의 해를 구합니다. 이 후 다시 돌아가 $V$의 해를 이용해 $U$의 해를 구합니다. 이처럼, $R$을 최대한 근사시키는 수렴 값을 얻을 때까지 반복합니다.
+ALS는 한 번에 한 특징 벡터 (feature vector)만 추출하기만 하면 되기 때문에 병렬적으로 빠르게 처리할 수 있습니다. 그렇기 때문에 스파크에서 이 방법을 사용한 큰 이유라 생각합니다. ALS 방법은 다음과 같습니다. 
+* 먼저, $U$를 랜덤하게 초기화하고 $V$의 해를 구합니다. 
+* 다시 돌아가 $V$의 해를 이용해 $U$의 해를 구합니다. 
+* $R$을 최대한 근사시키는 수렴 값을 얻을 때까지 반복합니다.
 
 이 연산이 끝나면  $U$와 $V$를 곱해 특정한 유저/아이템 상호작용에 대한 평점을 예측할 수 있습니다. 이것이 Hu, Koren, and Volinsky의 [Collaborative Filtering for Implicit Feedback Datasets](http://yifanhu.net/PUB/cf.pdf)에서 사용한 ALS 방법입니다. 이제 이 논문에서 사용된 방법을 실제 데이터에 적용해보고, 추천 시스템을 구축해보겠습니다.
 
@@ -139,7 +143,7 @@ item_lookup['StockCode'] = item_lookup['StockCode'].astype(str)
 item_lookup.head()
 ```
 
-ALS 알고리즘의 입력값 형태를 만드려면 데이터를 변형해야 합니다. 이를 위해 유니크한 고객 ID를 행렬의 행으로, 유니크한 아이템 ID를 행렬의 열로 만듭니다. 행렬의 값은 각 유저가 각 아이템을 구매한 총 횟수입니다. 이런 행렬을 **희소 행렬 (Sparse Matrix)**라 합니다.
+ALS 알고리즘의 입력값 형태를 만드려면 데이터를 변형해야 합니다. 유니크한 고객 ID를 행렬의 행으로, 유니크한 아이템 ID를 행렬의 열로 만듭니다. 행렬의 값은 각 유저가 각 아이템을 구매한 총 횟수입니다. 이런 행렬을 **희소 행렬 (Sparse Matrix)**라 합니다.
 
 ```python
 # matrix가 매우 크기 때문에 Sparse matrix로 바꾸어주어서
@@ -403,10 +407,11 @@ import implicit
 
 ```
 alpha = 15
-user_vecs, item_vecs = implicit.alternating_least_squares((product_train*alpha).astype('double')
-                                                          , factors=20
-                                                          , regularization = 0.1
-                                                          , iterations = 50)
+user_vecs, item_vecs = implicit.alternating_least_squares(
+    (product_train*alpha).astype('double')
+    , factors=20
+    , regularization = 0.1
+    , iterations = 50)
 predictions = [sparse.csr_matrix(user_vecs), sparse.csr_matrix(item_vecs.T)]
 ```
 
@@ -415,7 +420,7 @@ predictions = [sparse.csr_matrix(user_vecs), sparse.csr_matrix(item_vecs.T)]
 ---
 ## 추천 시스템 평가하기
 
-훈련 데이터 중 20%는 가려졌다는 사실을 기억하시나요? 이 걸 이용해서 추천 시스템의 성능을 평가할 것입니다. 결과적으로 유저마다 예측 평점이 높은 아이템 (추천할 아이템)이 실제로 구매한 아이템인지를 보아야 합니다. 흔히 쓰이는 지표는 ROC 커브입니다. ROC 커브 밑에 차지하는 면적이 넓을수록 추천할 아이템과 실제 구매한 아이템이 비슷함을 의미합니다. 이 면적을 AUC (Area Under the Curve)라 부릅니다.
+훈련 데이터 중 20%는 가려졌다는 사실을 기억하시나요? 이를 이용해서 추천 시스템의 성능을 평가할 것입니다. 결과적으로 유저마다 예측 평점이 높은 아이템 (추천할 아이템)이 실제로 구매한 아이템인지를 보아야 합니다. 흔히 쓰이는 지표는 ROC 커브입니다. ROC 커브 밑에 차지하는 면적이 넓을수록 추천할 아이템과 실제 구매한 아이템이 비슷함을 의미합니다. 이 면적을 AUC (Area Under the Curve)라 부릅니다.
 
 이를 위해서 가려진 정보가 있는 아이템을 가진 유저마다 AUC를 구하는 함수가 필요합니다. 또한 추천 시스템과 비교하기 위해서 가장 인기있는 아이템을 기반으로 추천했을 때 AUC는 어떤지도 계산할 것입니다.
 
@@ -486,7 +491,7 @@ def calc_mean_auc(training_set, altered_users, predictions, test_set):
 
 인기 기반 추천보다 ALS 기반 추천이 더 나은 성능을 낸다는 것을 알았습니다. 이제 어떻게 특정한 유저에게 추천이 되는지 확인해봅시다.
 
-먼저, 훈련 데이터에서 유저가 이미 구매한 아이템이 무엇인지 파악해야 합니다. 이를 위해 `get_items_purchased` 함수를 이용합니다.
+먼저, 훈련 데이터에서 유저가 이미 구매한 아이템이 무엇인지 파악해야 합니다. `get_items_purchased` 함수는 특정 유저가 구매한 목록을 보여줍니다.
 
 ```python
 def get_items_purchased(customer_id, mf_train, customer_list, products_list, item_lookup):
@@ -580,7 +585,7 @@ def rec_items(customer_id, mf_train, user_vecs, item_vecs, customer_list, item_l
     ![](../../images/implicit_recommend.png)
 
 
-이 둘을 비교해보면 12361 id를 가진 유저는 식기 세트 (cutlery set)를 많이 구매했는데, 추천 목록에서는 아직 구매하지 않은 핑크색, 빨간색 식기 세트를 추천하고 있습니다. 또한 가족 앨범을 위한 사진틀이 1순위로 추천됐는데 아마도 해당 유저가 구매한 아이템들이 가족을 가진 아내들이 많이 사는 아이템이지 않을까 싶습니다. 이처럼 추천 시스템이 보기에도 알맞게 추천되고 있음을 확인할 수 있습니다.
+이 둘을 비교해보면 12361 id를 가진 유저는 식기 세트 (cutlery set)를 많이 구매했는데, 추천 목록에서는 아직 구매하지 않은 핑크색, 빨간색 식기 세트를 추천하고 있습니다. 또한 가족 앨범을 위한 사진틀이 1순위로 추천됐는데 아마도 해당 유저가 구매한 아이템들이 가족을 가진 아내들이 많이 사는 아이템이지 않을까 싶습니다. 이렇게 추천 시스템이 보기에도 알맞게 추천되고 있음을 확인할 수 있습니다.
 
 
 이 글에서는 어떻게 암시적 피드백 데이터에서 추천 시스템이 작동하는지를 배웠습니다. 전체 코드는 [여기](https://github.com/assaeunji/recommendation/blob/main/Implicit%20Feedback_OnlineRetail.ipynb)에서 확인하실 수 있습니다.
