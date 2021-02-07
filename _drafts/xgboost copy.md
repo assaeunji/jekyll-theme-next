@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "GBM (Gradient Boosting Machines) 에 대한 자세한 설명 (2): Classification"
+title: "데이터 분석가"
 date: 2020-08-30
 categories: [ML]
 tag: [tree algorithm,supervised-learning, boosting, gbm,xgboost, lightgbm]
@@ -9,24 +9,34 @@ photos:
     - "../../images/tree-titleimage.jpg"
 ---
 
-* 오늘은 [GBM에 대한 자세한 설명 (1): Regression](https://assaeunji.github.io/ml/2020-09-05-gbm/)편에 이어 GBM을 분류 (Classification)에 활용할 때 어떤 원리로 쓰이는지 알아보고자 합니다. 
-* 이 또한 StatQuest with Josh Starmer YouTube "Gradient Boost Part 3: Classification" [link](https://www.youtube.com/watch?v=jxuNLH5dXCs)를 참조했습니다.
+요즘 제가 듣는 말은 "이상한" 사람
+첫 인상과 다른 사람
+이상한 사람이 되기까지 
 
-----
-## Introduction 
+내 측면
+나를 알아가는 과정이 오래 걸렸다.
+"먹어봐야 똥인지 안다"는 제가 자주 쓰는 말
+- 겪어보지 못하면 그 일에 대해 상상하기 어렵고 (내가 그에 잘 어울리는지 잘 어울리지 않는지 알 수 없음)
+- 제가 아무데서나 잘 적응한다고 믿고 있었기 때문에 어떤 회사든 상관 없다는 마인드
 
-GBM을 이용한 분류는 로지스틱 회귀와 비슷한 점이 많습니다.
+회사 측면
+- 운이 없는 것도 배제할 수 없음
 
-1. Initial Prediction: log (odds) = log (4/2) = 0.69
-   1. log odds를 로지스틱 함수에 넣으면
-   2. P(love troll2) = e^log(odds) / (1+e^log(odds)) = 0.67
-   3. 0.5보다 크기 때문에 모든 사람을 troll2를 모두 좋아한다고 분류한다.
 
-2. Pseudo-Residual을 계산해서 얼마나 초기 예측이 틀렸는지를 계산
-   1. (Observed - Predicted)
-   2. y = p(loving troll 2) = .7
-   3. Red, Blue = observed
-   4. dot of line = predicted
-   5. residual = 0.3 or -0.7
-3. Tree 를 파봌ㄴ, 나무, 좋아하는 컬러로 tree를 만든다
-4. sum residuals / sum (previous probaability * (1-p_i))
+2012년
+- 영어영문학으로 입학
+- 동아리에서 신나게 놈
+- 통계학을 복수전공하면서 통계학과 관련된 직업을 갖고 싶다는 막연한 생각
+- 근데 또 보험, 금융은 나랑 안 맞는다는 막연한 생각이 있었다
+
+2013년
+- 여전히 동아리
+- R성적 B+, SAS가 더 재밌다고 생각
+- 근데 또 영문과도 살리고 싶어서 교환도 다녀옴 (친구따라) 2013년 9월 ~ 2014년 5월
+
+
+- 
+- 리서치 회사에 산학 인턴 4개월 간
+- 
+
+
