@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="Pelican" name="generator"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+   Visualizing Nested Loops Joins And Understanding Their Implications
+  </title>
+  <link href="https://bertwagner.com/theme/css/main.css" rel="stylesheet"/>
+  <link href="https://dev.bertwagner.com/atom.xml" rel="alternate" title="Data with Bert Atom Feed" type="application/atom+xml"/>
+  <link href="https://dev.bertwagner.com/rss.xml" rel="alternate" title="Data with Bert RSS Feed" type="application/rss+xml"/>
+  <script async="" data-domain="bertwagner.com" defer="" src="https://stats.bertwagner.com/js/index.js">
+  </script>
+  <link href="https://bertwagner.com/theme/images/site-icon-32x32.png" rel="icon" sizes="32x32"/>
+  <link href="https://bertwagner.com/theme/images/site-icon-192x192.png" rel="icon" sizes="192x192"/>
+  <link href="https://bertwagner.com/theme/images/site-icon-180x180.png" rel="apple-touch-icon"/>
+  <meta content="https://bertwagner.com/theme/images/site-icon-270x270.png" name="msapplication-TileImage">
+   <meta content="This post is the first in a series about physical join operators (be sure to check out part 2 - merge joins, and part 3 - hash match joins). Watch..." name="description"/>
+  </meta>
+  <link href="https://bertwagner.com/posts/visualizing-nested-loops-joins-and-understanding-their-implications/" rel="canonical"/>
+  <script type="application/ld+json">
+   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Data with Bert", "item": "https://bertwagner.com"}, {"@type": "ListItem", "position": 2, "name": "Posts", "item": "https://bertwagner.com/posts"}, {"@type": "ListItem", "position": 3, "name": "Visualizing nested loops joins and understanding their implications", "item": "https://bertwagner.com/posts/visualizing-nested-loops-joins-and-understanding-their-implications"}, {"@type": "ListItem", "position": 4, "name": "Index", "item": "https://bertwagner.com/posts/visualizing-nested-loops-joins-and-understanding-their-implications/index.html"}]}
+  </script>
+  <script type="application/ld+json">
+   {"@context": "https://schema.org", "@type": "Article", "author": {"@type": "Person", "name": "Bert Wagner"}, "publisher": {"@type": "Organization", "name": "Data with Bert"}, "headline": "Visualizing Nested Loops Joins And Understanding Their Implications", "about": "SQL/Performance Tuning/Execution Plans", "datePublished": "2018-12-11 07:00"}
+  </script>
+ </head>
+ <body>
+  <main>
+   <header>
+    <div>
+     <a href="https://bertwagner.com">
+      <img id="logo-header" src="https://bertwagner.com/theme/images/logo-header.png"/>
+     </a>
+    </div>
+    <nav id="menu" role="navigation">
+     <label for="tm" id="toggle-menu">
+      Navigation
+      <span class="drop-icon">
+       ▾
+      </span>
+     </label>
+     <input id="tm" type="checkbox"/>
+     <ul class="main-menu clearfix">
+      <li>
+       <a href="https://bertwagner.com/categories.html">
+        Categories
+        <span class="drop-icon">
+         ▾
+        </span>
+        <label class="drop-icon" for="sm1" title="Toggle Drop-down">
+         ▾
+        </label>
+       </a>
+       <input id="sm1" type="checkbox"/>
+       <ul class="sub-menu">
+        <li>
+         <a href="https://bertwagner.com/category/meta.html">
+          Meta
+         </a>
+        </li>
+        <li>
+         <a href="https://bertwagner.com/category/professional-development.html">
+          Professional Development
+          <span class="drop-icon">
+           ▾
+          </span>
+          <label class="drop-icon" for="sm22" title="Toggle Drop-down">
+           ▾
+          </label>
+         </a>
+         <input id="sm22" type="checkbox"/>
+         <ul class="sub-menu">
+          <li>
+           <a href="https://bertwagner.com/category/professional-development/presenting.html">
+            Presenting
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li>
+         <a href="https://bertwagner.com/category/programming.html">
+          Programming
+         </a>
+        </li>
+        <li>
+         <a href="https://bertwagner.com/category/python.html">
+          Python
+         </a>
+        </li>
+        <li>
+         <a href="https://bertwagner.com/category/sql.html">
+          SQL
+          <span class="drop-icon">
+           ▾
+          </span>
+          <label class="drop-icon" for="sm26" title="Toggle Drop-down">
+           ▾
+          </label>
+         </a>
+         <input id="sm26" type="checkbox"/>
+         <ul class="sub-menu">
+          <li>
+           <a href="https://bertwagner.com/category/sql/azure.html">
+            Azure
+           </a>
+          </li>
+          <li>
+           <a href="https://bertwagner.com/category/sql/community.html">
+            Community
+           </a>
+          </li>
+          <li>
+           <a href="https://bertwagner.com/category/sql/dbatools.html">
+            dbatools
+           </a>
+          </li>
+          <li>
+           <a href="https://bertwagner.com/category/sql/development.html">
+            Development
+            <span class="drop-icon">
+             ▾
+            </span>
+            <label class="drop-icon" for="sm34" title="Toggle Drop-down">
+             ▾
+            </label>
+           </a>
+           <input id="sm34" type="checkbox"/>
+           <ul class="sub-menu">
+            <li>
+             <a href="https://bertwagner.com/category/sql/development/dates.html">
+              Dates
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/development/dynamic-sql.html">
+              Dynamic SQL
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/development/json.html">
+              JSON
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/development/recursive-queries.html">
+              Recursive Queries
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/development/sql-injection.html">
+              SQL Injection
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/development/temporal-tables.html">
+              Temporal Tables
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/development/window-functions.html">
+              Window Functions
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/development/xml.html">
+              XML
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li>
+           <a href="https://bertwagner.com/category/sql/internals.html">
+            Internals
+           </a>
+          </li>
+          <li>
+           <a href="https://bertwagner.com/category/sql/performance-tuning.html">
+            Performance Tuning
+            <span class="drop-icon">
+             ▾
+            </span>
+            <label class="drop-icon" for="sm36" title="Toggle Drop-down">
+             ▾
+            </label>
+           </a>
+           <input id="sm36" type="checkbox"/>
+           <ul class="sub-menu">
+            <li>
+             <a href="https://bertwagner.com/category/sql/performance-tuning/execution-plans.html">
+              Execution Plans
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/performance-tuning/indexing.html">
+              Indexing
+             </a>
+            </li>
+            <li>
+             <a href="https://bertwagner.com/category/sql/performance-tuning/query-rewrites.html">
+              Query Rewrites
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li>
+           <a href="https://bertwagner.com/category/sql/quirks.html">
+            Quirks
+           </a>
+          </li>
+          <li>
+           <a href="https://bertwagner.com/category/sql/ssms.html">
+            SSMS
+           </a>
+          </li>
+          <li>
+           <a href="https://bertwagner.com/category/sql/tsqltuesday.html">
+            TSqlTuesday
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li>
+       <a href="https://bertwagner.com/pages/about/">
+        About
+       </a>
+      </li>
+      <li>
+       <a href="https://bertwagner.com/pages/contact/">
+        Contact
+       </a>
+      </li>
+     </ul>
+    </nav>
+   </header>
+   <section>
+    <article>
+     <h1 class="article-title">
+      <a href="https://bertwagner.com/posts/visualizing-nested-loops-joins-and-understanding-their-implications/" rel="bookmark" title="Permalink to Visualizing Nested Loops Joins And Understanding Their Implications">
+       Visualizing Nested Loops Joins And Understanding Their Implications
+      </a>
+     </h1>
+     <div class="article-info">
+      <div class="published-date" title="2018-12-11T07:00:00-05:00">
+       Published Tue 11 December 2018 in
+       <a href="https://bertwagner.com/category/sql.html">
+        SQL
+       </a>
+       &gt;
+       <a href="https://bertwagner.com/category/sql/performance-tuning.html">
+        Performance Tuning
+       </a>
+       &gt;
+       <a href="https://bertwagner.com/category/sql/performance-tuning/execution-plans.html">
+        Execution Plans
+       </a>
+      </div>
+     </div>
+     <div class="article-content">
+      <p>
+       <em>
+        This post is the first in a series about physical join operators (be sure to check out
+        <a href="https://bertwagner.com/2018/12/18/visualizing-merge-join-internals-and-understanding-their-implications/">
+         part 2 - merge joins
+        </a>
+        , and
+        <a href="https://bertwagner.com/2019/01/02/visualizing-hash-match-join-internals-and-understanding-their-implications/">
+         part 3 - hash match joins
+        </a>
+        ).
+       </em>
+      </p>
+      <div class="youtube-container">
+       <iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" class="youtube-video" frameborder="0" src="https://www.youtube-nocookie.com/embed/0arjvMJihJo">
+       </iframe>
+      </div>
+      <p>
+       <a href="https://youtu.be/0arjvMJihJo">
+        Watch this week's video on YouTube
+       </a>
+      </p>
+      <h2>
+       What Physical Join Operators Tell Us
+      </h2>
+      <p>
+       Everyone has their own method of reading an execution plan when performance tuning a slow SQL query.  One of the first things I like to look at are what kind of join operators are being used:
+      </p>
+      <p>
+       <img alt="image-1" class="wp-image-6864" src="https://bertwagner.com/wp-content/uploads/2018/12/image-1.png"/>
+      </p>
+      <p>
+       These three little icons may not seem like the most obvious place to begin troubleshooting a slow query, but with larger plans especially I like starting with a quick glance at the join operators because they allow you to infer a lot about what SQL Server thinks about your data.
+      </p>
+      <p>
+       This will be a three part series where we'll learn how each join algorithm works and what they can reveal about our upstream execution plan operators.
+      </p>
+      <h2>
+       Nested Loops Join
+      </h2>
+      <p>
+       <img alt="Nested-Loop-Join-50fps-1" class="wp-image-6878" src="https://bertwagner.com/wp-content/uploads/2018/12/Nested-Loop-Join-50fps-1.gif"/>
+      </p>
+      <p>
+       Nested loops joins work like this: SQL Server takes the first value from our first table (our "outer" table -
+       <a href="https://bertwagner.com/2017/11/21/does-the-join-order-of-my-tables-matter/">
+        by default SQL Server decides for us which table of the two this will be
+       </a>
+       ), and compares it to every value in our second "inner" table to see if they match.
+      </p>
+      <p>
+       Once every inner value has been checked, SQL Server moves to the next value in the outer table and the process repeats until every value from our outer table has been compared to every value in our inner table.
+      </p>
+      <p>
+       This description is a worst case example of the performance of a nested loop join.  Several optimizations exist that can make the join more efficient.  For example, if the inner table join values are sorted (because of an index you created or a spool that SQL Server created), SQL Server can process the rows much faster:
+      </p>
+      <p>
+       <img alt="nest-loops-sorted-50fps-2" class="wp-image-7020" src="https://bertwagner.com/wp-content/uploads/2018/12/nest-loops-sorted-50fps-2.gif"/>
+      </p>
+      <p>
+       In the above animation, the inner input is a index sorted on the join key, allowing SQL Server to seek directly to the rows it needs, reducing the total number of comparisons that need to be made
+      </p>
+      <p>
+       For more in-depth explanations of the internals and optimizations of nested loops joins, I recommend reading
+       <a href="https://blogs.msdn.microsoft.com/craigfr/2006/07/26/nested-loops-join/">
+        this post by Craig Freedman
+       </a>
+       as well as
+       <a href="https://sqlserverfast.com/epr/nested-loops/">
+        Hugo Kornelis's reference on nested loops
+       </a>
+       .
+      </p>
+      <h2>
+       What Do Nested Loops Joins Reveal?
+      </h2>
+      <p>
+       Knowing the internals of how a nested loops join works allows us to infer what the optimizer thinks about our data and the join's upstream operators, helping us focus our performance tuning efforts.
+      </p>
+      <p>
+       Here are a few scenarios to consider the next time you see a nested loops join being used in your execution plan:
+      </p>
+      <ul>
+       <li>
+        Nested loops joins are CPU intensive; at worst, every row needs to be compared to every other row and this can take some time.  This means when you see a nested loops join, SQL Server
+        <em>
+         probably
+        </em>
+        thinks that one of the two inputs is relatively small.
+       </li>
+       <li>
+        <p>
+         ... and if one of the inputs
+         <em>
+          is
+         </em>
+         relatively small, great!  If instead you see upstream operators that are moving large amounts of data, you may have a estimation problem going on in this area of the plan and may need to update stats/add indexes/refactor the query to have SQL Server provide better estimates (and maybe a more appropriate join).
+        </p>
+       </li>
+       <li>
+        <p>
+         Nested loops sometimes accompany RID or key lookups.  I always check for one of these because they often leave room for some performance improvements:
+        </p>
+        <ul>
+         <li>
+          If a RID lookup exists, it's usually easy enough to add a clustered index to that underlying table to squeeze out some extra performance.
+         </li>
+        </ul>
+       </li>
+       <li>
+        <p>
+         If either RID or key lookup exist, I always check what columns are being returned to see if a smaller index could be used instead (by including a column in a key/column of an existing index) or if the query can be refactored to not bring back those columns (eg. get rid of the SELECT *).
+        </p>
+       </li>
+       <li>
+        <p>
+         Nested loops joins do not require data to be sorted on input.  However, performance can improve with an indexed inner data source (see animation above), and SQL Server might choose a more efficient operator if the inputs are both sorted.
+        </p>
+        <ul>
+         <li>
+          At the very least, nested loops joins make me think to check whether the input data isn't sorted because of some upstream transformations, or because of missing indexes.
+         </li>
+        </ul>
+       </li>
+      </ul>
+      <p>
+       So while nested loops in your plans will always require more investigation, looking at them and the operators around them can provide some good insight into what SQL Server thinks about your data.
+      </p>
+     </div>
+    </article>
+   </section>
+   <aside>
+    <div class="sidebar-group">
+     <h3>
+      Social
+     </h3>
+     <div id="social-container">
+      <div class="social-group">
+       <a href="https://youtube.com/bertwagner">
+        <img class="social-icon" src="https://bertwagner.com/theme/images/youtube 64px.png"/>
+        YouTube
+       </a>
+      </div>
+      <div class="social-group">
+       <a href="https://twitter.com/bertwagner">
+        <img class="social-icon" src="https://bertwagner.com/theme/images/twitter 64px.png"/>
+        Twitter
+       </a>
+      </div>
+      <div class="social-group">
+       <a href="https://github.com/bertwagner">
+        <img class="social-icon" src="https://bertwagner.com/theme/images/github 64px.png"/>
+        GitHub
+       </a>
+      </div>
+     </div>
+    </div>
+    <div class="sidebar-group">
+     <h3>
+      Notification Signup
+     </h3>
+     <p>
+      Receive new posts and videos in your inbox.
+     </p>
+     <form action="https://bertwagner.us8.list-manage.com/subscribe/post?u=a5b47beaf6a8a12d00c7ee009&amp;id=12db04bbd9" class="validate" id="mc-embedded-subscribe-form" method="post" name="mc-embedded-subscribe-form" novalidate="" target="_blank">
+      <label for="mce-EMAIL">
+       Email:
+      </label>
+      <input class="required email" id="mce-EMAIL" name="EMAIL" type="email" value=""/>
+      <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+      <div aria-hidden="true" style="position: absolute; left: -5000px;">
+       <input name="b_a5b47beaf6a8a12d00c7ee009_12db04bbd9" tabindex="-1" type="text" value=""/>
+      </div>
+      <button id="mailchimp-subscribe" type="submit">
+       Subscribe
+      </button>
+     </form>
+    </div>
+    <div class="sidebar-group">
+     <h3>
+      Search
+     </h3>
+     <form action="https://duckduckgo.com/" method="GET">
+      <input name="sites" type="hidden" value="bertwagner.com">
+       <input name="ia" type="hidden" value="web">
+        <label>
+         Search:
+        </label>
+        <input class="search-field" name="q" placeholder="Search …" type="search" value="">
+         <button id="site-search" type="submit">
+          Search
+         </button>
+        </input>
+       </input>
+      </input>
+     </form>
+    </div>
+   </aside>
+   <footer>
+    Data with Bert / Proudly generated with Pelican
+   </footer>
+  </main>
+ </body>
+</html>
