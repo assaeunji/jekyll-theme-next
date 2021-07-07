@@ -234,7 +234,7 @@ social_icons:
 
 # Sidebar Avatar
 # in directory: /assets/images/avatar.gif
-avatar: "/assets/images/icebear.png"
+avatar: "../../images/meavatar.png"
 
 
 # Table Of Contents in the Sidebar
