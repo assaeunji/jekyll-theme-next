@@ -3,7 +3,7 @@ layout: page
 type: about
 ---
 
-![](../../images/me.jpg){: width="200", height="200"}
+![](../../images/meavatar.png){: width="200", height="200"}
 
 <center>
 <mark style="background-color: #fff5b1">
