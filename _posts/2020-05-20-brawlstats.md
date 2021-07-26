@@ -11,7 +11,7 @@ photos:
 ---
 
 * 마침 Python의 `brawlstats` 라이브러리가 브롤 스타즈 API wrapper를 제공하고 있어 전투 기록을 모으는 게 가능해졌습니다. 따라서 이 포스팅에서는 다음과 같이 전투 기록을 주기적으로 모으는 방법에 대해 설명하고자 합니다.
-* 관련 코드는 [이 곳](https://github.com/assaeunji/brawlstars-analysis)에서 확인하실 수 있습니다.
+* 관련 코드는 [이 곳](https://github.com/assaeunji/brawlstars-analysis){:target="_blank"}에서 확인하실 수 있습니다.
 
 ---
 
@@ -47,7 +47,7 @@ photos:
 
 브롤스타즈가 기존에는 공식 API와 비공식 API를 둘 다 제공했는데 이제 **공식 API**로 통합되었습니다. **토큰**이란 파이썬 `brawlstats` 모듈에서 API에 접속하기 위한 비밀번호와 같은 것입니다. 자세한 과정은 다음과 같습니다.
 
-1. [브롤스타즈 공식 API](https://developer.brawlstars.com/#/getting-started)에 접속하고 가입합니다.
+1. [브롤스타즈 공식 API](https://developer.brawlstars.com/#/getting-started){:target="_blank"}에 접속하고 가입합니다.
 2. My Keys > Create New Key를 클릭합니다.
 
     ![](../../images/brawl-officialapi3.png)
@@ -65,7 +65,7 @@ photos:
 ---
 ## AWS EC2 가상환경에서 전투기록 파싱하기
 
-Python의 `brawlstats` 라이브러리에 대한 공식 문서는 [이 곳](https://brawlstats.readthedocs.io/en/latest/)에서 찾을 수 있습니다.
+Python의 `brawlstats` 라이브러리에 대한 공식 문서는 [이 곳](https://brawlstats.readthedocs.io/en/latest/){:target="_blank"}에서 찾을 수 있습니다.
 
 전투 기록을 파싱하려면 앞서 발급받은 **토큰**과 내 게임 **태그**가 필요합니다. 게임 태그는 브롤 스타즈에 접속해서 **좌측 상단**의 제 닉네임을 클릭하시면 확인할 수 있습니다.
 아래 사진에서 `#URC00YYV`가 제 게임 태그입니다. 
@@ -588,7 +588,7 @@ def parse_single_user(self,tag):
 ---
 ## AWS EC2 가상환경에서 crontab으로 주기적으로 전투기록 저장하기
 
-윈도우에서도 작업 스케줄러나 cron으로 원하는 시간마다 파이썬 코드가 실행되도록 예약 작업을 할 수 있지만 ([참조](http://hleecaster.com/task-scheduling-in-windows-using-cron/)), 항상 컴퓨터를 켜놓아야 되는 부담 때문에 AWS EC2 가상환경에서 crontab을 이용하기로 했습니다. crontab에 대한 자세한 설명과 사용 방법은 [이 포스팅](https://assaeunji.github.io/aws/2020-05-18-crontab/)을 참조하시면 됩니다. crontab을 이용해 주기적으로 전투기록을 저장하는 방법은 다음과 같습니다.
+윈도우에서도 작업 스케줄러나 cron으로 원하는 시간마다 파이썬 코드가 실행되도록 예약 작업을 할 수 있지만 ([참조](http://hleecaster.com/task-scheduling-in-windows-using-cron/){:target="_blank"}), 항상 컴퓨터를 켜놓아야 되는 부담 때문에 AWS EC2 가상환경에서 crontab을 이용하기로 했습니다. crontab에 대한 자세한 설명과 사용 방법은 [이 포스팅](https://assaeunji.github.io/aws/2020-05-18-crontab/){:target="_blank"}을 참조하시면 됩니다. crontab을 이용해 주기적으로 전투기록을 저장하는 방법은 다음과 같습니다.
 
 1. 위의 함수들을 `brawlparser`라는 `Class`에 저장해놓고 `bsparser.py`로 저장
 2. `main.py`에 `crontab`을 실행할 파서 작성 
@@ -646,12 +646,12 @@ if __name__ == "__main__":
 *  `tag`: Python 브롤 스타즈 API에 접속할 태그. 저는 제 태그인 `URC00YYV`를 넣었습니다.
 
 만약 제 전투기록만 불러오고 싶다면 `tag_path`의 flag를 쓰지 않으면 됩니다! 이 후 crontab에는 매일 오후 5시 (젬그랩 맵이 바뀌는 시간)에 저장하도록 했습니다. 
-전체 코드는 [이 곳](https://github.com/assaeunji/brawlstars-analysis)에서 확인하실 수 있습니다. 이렇게 한 열흘 간 데이터를 모아서 여러 주제로 분석해볼 예정입니다. 재밌는 인사이트가 나오면 좋겠군요!
+전체 코드는 [이 곳](https://github.com/assaeunji/brawlstars-analysis){:target="_blank"}에서 확인하실 수 있습니다. 이렇게 한 열흘 간 데이터를 모아서 여러 주제로 분석해볼 예정입니다. 재밌는 인사이트가 나오면 좋겠군요!
 
 
 
 ---
 ## References
-* 브롤스타즈 공식 API [`[link]`](https://developer.brawlstars.com/#/getting-started)
-* Python BrawlStats Library Document [`[link]`](https://brawlstats.readthedocs.io/en/latest/)
-* novdov님의 브롤스타즈 Python API로 전투 기록 확인하기 [`[link]`](https://novdov.github.io/data%20anaylsis/2019/08/18/Brawl-Stars-API/)
+* 브롤스타즈 공식 API [`[link]`](https://developer.brawlstars.com/#/getting-started){:target="_blank"}
+* Python BrawlStats Library Document [`[link]`](https://brawlstats.readthedocs.io/en/latest/){:target="_blank"}
+* novdov님의 브롤스타즈 Python API로 전투 기록 확인하기 [`[link]`](https://novdov.github.io/data%20anaylsis/2019/08/18/Brawl-Stars-API/){:target="_blank"}

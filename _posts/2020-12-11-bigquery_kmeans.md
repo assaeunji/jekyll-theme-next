@@ -8,26 +8,26 @@ comments: true
 ---
 
 ![](../../images/bigquery_intro.png)
-BigQuery ML에서는 표준 SQL 쿼리를 사용하여 BigQuery에서 머신러닝 모델을 만들고 실행할 수 있습니다. (참조: [`[link]`](https://cloud.google.com/bigquery-ml/docs/introduction?hl=ko))
+BigQuery ML에서는 표준 SQL 쿼리를 사용하여 BigQuery에서 머신러닝 모델을 만들고 실행할 수 있습니다. (참조: [`[link]`](https://cloud.google.com/bigquery-ml/docs/introduction?hl=ko){:target="_blank"})
 {:.figure}
 
 * 사진에서 볼 수 있듯이 이번 포스팅에서는 쉽게 BigQuery ML <sup>줄여서 "BQML"</sup>를 이용해 K-평균 클러스터링을 구현하는 방법에 대해 알아보고자 합니다.
-* 자세한 내용은 [BigQuery ML k-평균 클러스터링 모델 만들기](https://cloud.google.com/bigquery-ml/docs/kmeans-tutorial?hl=ko) 페이지를 참조해주시길 바랍니다.
-* 또한 성윤님의 [BigQuery의 모든 것 입문편](https://www.slideshare.net/zzsza/bigquery-147073606)도 보시는 것을 추천합니다!
+* 자세한 내용은 [BigQuery ML k-평균 클러스터링 모델 만들기](https://cloud.google.com/bigquery-ml/docs/kmeans-tutorial?hl=ko){:target="_blank"} 페이지를 참조해주시길 바랍니다.
+* 또한 성윤님의 [BigQuery의 모든 것 입문편](https://www.slideshare.net/zzsza/bigquery-147073606){:target="_blank"}도 보시는 것을 추천합니다!
   
 ----
 ## Introduction
 
-요즘 빅쿼리를 사용할 일들이 종종 있어 "배워야지"하기만 하고 아직 실천을 하지 못했는데요. 최근에 또 [구글 빅쿼리 완벽 가이드](https://www.aladin.co.kr/m/mproduct.aspx?itemid=256496408)도 샀겠다, 구글 빅쿼리 강의도 ~~흘려~~ 들었겠다 하여 한 번 공부해볼까?하는 마음에 구글 빅쿼리 튜토리얼을 읽게 되었습니다.
+요즘 빅쿼리를 사용할 일들이 종종 있어 "배워야지"하기만 하고 아직 실천을 하지 못했는데요. 최근에 또 [구글 빅쿼리 완벽 가이드](https://www.aladin.co.kr/m/mproduct.aspx?itemid=256496408){:target="_blank"}도 샀겠다, 구글 빅쿼리 강의도 ~~흘려~~ 들었겠다 하여 한 번 공부해볼까?하는 마음에 구글 빅쿼리 튜토리얼을 읽게 되었습니다.
 
-그 도중 [BigQuery ML k-평균 클러스터링 모델 만들기](https://cloud.google.com/bigquery-ml/docs/kmeans-tutorial?hl=ko)가 딱 눈에 띄여서 한번 실습해봤는데, 생각보다 쉽게 할 수 있어서 이를 공유해야겠다는 기쁜 마음에 이 글을 쓰게 되었습니다.
+그 도중 [BigQuery ML k-평균 클러스터링 모델 만들기](https://cloud.google.com/bigquery-ml/docs/kmeans-tutorial?hl=ko){:target="_blank"}가 딱 눈에 띄여서 한번 실습해봤는데, 생각보다 쉽게 할 수 있어서 이를 공유해야겠다는 기쁜 마음에 이 글을 쓰게 되었습니다.
 
 기존에 SQL 언어에 익숙하신 분이라면 어렵지 않게 따라할 수 있을 것으로 보입니다.
 
 ---
 ## GCP 새 프로젝트 만들기
 
-전 이미 프로젝트가 있었지만, 가이드를 위해 Google Cloud Platform <sup>GCP</sup> 콘솔 [`[link]`](https://console.cloud.google.com/home)에 들어가서 새 프로젝트를 생성해보았습니다.
+전 이미 프로젝트가 있었지만, 가이드를 위해 Google Cloud Platform <sup>GCP</sup> 콘솔 [`[link]`](https://console.cloud.google.com/home){:target="_blank"}에 들어가서 새 프로젝트를 생성해보았습니다.
 
 먼저, 좌측 상단에서 `프로젝트 선택`을 클릭하고 `새 프로젝트`를 눌러 프로젝트를 생성합니다.
 
@@ -188,7 +188,7 @@ order by distance_from_city_center
 * 첫 번째 컬럼은 공통이 되는 정거장 이름 (`station_name`)입니다.
 * 두 번째 컬럼은 주중/ 주말을 구분하는 `isweekday`라는 컬럼입니다. `cycle_hire`의 대여 시작 시간에서 요일을 추출해서 7 (토요일), 1 (일요일)의 값을 가지면 "weekend" (주말)라는 값을 갖고, 그 외 주중이라면 "weekday" (주중)이라는 값을 갖도록 합니다.
 * 세 번째 컬럼은 `cycle_hire`의 대여 시간을 나타내는 `duration` 컬럼입니다.
-* 네 번째 컬럼은 도시에서의 거리를 나타내는 `distnace_from_city_center` 컬럼인데요. 먼저 `st_geogpoint(경도, 위도)`라는 [BigQuery의 지리 함수](https://cloud.google.com/bigquery/docs/reference/standard-sql/geography_functions?hl=ko)를 이용해서 해당 대여소의 위치를 반환해주고, `st_geogpoint(-0.1, 51.5)`라는 지점과 대여소 간의 거리를 계산해주는 `st_distance (지역1, 지역2)` 함수를 사용합니다. 이 함수는 두 지역 간의 최단 거리를 미터 단위로 계산해줍니다. 따라서 이를 1000으로 나눠서 **킬로미터 단위**로 만든 것이 해당 컬럼입니다. 여담으로 st_geogpoint(-0.1, 51.5)에 해당하는 지역이 어딜까 구글 지도에서 찍어보니 **사우스워크 영국 런던**라는 곳이 찍히네요!
+* 네 번째 컬럼은 도시에서의 거리를 나타내는 `distnace_from_city_center` 컬럼인데요. 먼저 `st_geogpoint(경도, 위도)`라는 [BigQuery의 지리 함수](https://cloud.google.com/bigquery/docs/reference/standard-sql/geography_functions?hl=ko){:target="_blank"}를 이용해서 해당 대여소의 위치를 반환해주고, `st_geogpoint(-0.1, 51.5)`라는 지점과 대여소 간의 거리를 계산해주는 `st_distance (지역1, 지역2)` 함수를 사용합니다. 이 함수는 두 지역 간의 최단 거리를 미터 단위로 계산해줍니다. 따라서 이를 1000으로 나눠서 **킬로미터 단위**로 만든 것이 해당 컬럼입니다. 여담으로 st_geogpoint(-0.1, 51.5)에 해당하는 지역이 어딜까 구글 지도에서 찍어보니 **사우스워크 영국 런던**라는 곳이 찍히네요!
     ![](../../images/bigquery_googlemap.png)
 
 이에 해당하는 쿼리만 실행하면 `hs`테이블의 형태를 볼 수 있습니다.

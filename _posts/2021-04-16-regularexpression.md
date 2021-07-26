@@ -10,8 +10,8 @@ photos:
 ---
 
 * 이번 포스팅은 **정규 표현식**의 네 가지 종류에 대해 알아보고 이를 PySpark에서 실습해보는 글을 작성하고자 합니다. 
-* 주요 내용은 [정규 표현식 더 이상 미루지 말자](https://www.youtube.com/watch?v=t3M6toIflyQ) YouTube 강의를 참조하였습니다.
-* 정규 표현식 실습 사이트는 [링크](https://regexr.com/5mhou)를 참조하세요!
+* 주요 내용은 [정규 표현식 더 이상 미루지 말자](https://www.youtube.com/watch?v=t3M6toIflyQ){:target="_blank"} YouTube 강의를 참조하였습니다.
+* 정규 표현식 실습 사이트는 [링크](https://regexr.com/5mhou){:target="_blank"}를 참조하세요!
 
 ---
 ## 글을 쓰게 된 계기
@@ -64,9 +64,9 @@ from email
 
 정규 표현식이 어려운 이유는 정규 표현식이 어떻게 분류되는지 모르기 때문이라 생각합니다.
 저도 이전부터 정규 표현식을 구글링한 경험이 많았지만, 항상 이해하지 못한 채 제가 원하는 정규 표현식만 찾아서 복붙하곤 했습니다.
-[위키 피디아](https://ko.wikipedia.org/wiki/정규_표현식)에서 찾아봐도 이 네 가지 종류에 대한 언급이 없이 나열만 하고 있다 보니 어렵기만 합니다.
+[위키 피디아](https://ko.wikipedia.org/wiki/정규_표현식){:target="_blank"}에서 찾아봐도 이 네 가지 종류에 대한 언급이 없이 나열만 하고 있다 보니 어렵기만 합니다.
 
-그러나 [정규 표현식 더 이상 미루지 말자](https://www.youtube.com/watch?v=t3M6toIflyQ) 강의에서는 **정규 표현식의 네 가지 종류**에 대해 명확히 설명하시고, 
+그러나 [정규 표현식 더 이상 미루지 말자](https://www.youtube.com/watch?v=t3M6toIflyQ){:target="_blank"} 강의에서는 **정규 표현식의 네 가지 종류**에 대해 명확히 설명하시고, 
 각각에 대해 예제를 보여줘서 처음 접하는 저도 쉽게 이해할 수 있었습니다. (강추!)
 
 여기서 언급하고 있는 네 가지 종류는 다음과 같습니다.
@@ -500,9 +500,9 @@ from email
 ---
 ## 이 글을 마치며
 
-오늘 포스팅은 정규 표현식의 네 가지 분류에 대해 알아보고, PySpark에서의 실습을 해보았습니다. 며칠 전 [퓨처 스킬](https://futureskill.io)이라는 곳을 접하게 되었는데요. 해당 사이트는 강의 클립을 짧게 보여주고 몇 개의 문제를 내어 스스로 문제를 풀고 피어 리뷰, 토론 등을 자유롭게 할 수 있는 사이트입니다. 이 곳에도 [정규 표현식에 대한 문제들](https://futureskill.io/content/3e0efc65-9243-43d4-94aa-91af268936ef)이 있으니 복습해보시길 바랍니다!
+오늘 포스팅은 정규 표현식의 네 가지 분류에 대해 알아보고, PySpark에서의 실습을 해보았습니다. 며칠 전 [퓨처 스킬](https://futureskill.io){:target="_blank"}이라는 곳을 접하게 되었는데요. 해당 사이트는 강의 클립을 짧게 보여주고 몇 개의 문제를 내어 스스로 문제를 풀고 피어 리뷰, 토론 등을 자유롭게 할 수 있는 사이트입니다. 이 곳에도 [정규 표현식에 대한 문제들](https://futureskill.io/content/3e0efc65-9243-43d4-94aa-91af268936ef){:target="_blank"}이 있으니 복습해보시길 바랍니다!
 
 
 ---
 ## References
-* [정규 표현식 더 이상 미루지 말자](https://www.youtube.com/watch?v=t3M6toIflyQ) YouTube 강의
+* [정규 표현식 더 이상 미루지 말자](https://www.youtube.com/watch?v=t3M6toIflyQ){:target="_blank"}YouTube 강의

@@ -40,7 +40,7 @@ comments: true
 
 ---
 ## 기본 단축키
-[Apple 공식 사이트](https://support.apple.com/ko-kr/HT201236)에 있는 기본 단축키 중 자주 쓸 것 같은 단축키를 모아왔습니다.
+[Apple 공식 사이트](https://support.apple.com/ko-kr/HT201236){:target="_blank"}에 있는 기본 단축키 중 자주 쓸 것 같은 단축키를 모아왔습니다.
 맥북 키보드에는 다음과 같은 키를 가지고 있습니다. 
 * ⌘(또는 cmd)
 * ⇧ (또는 shift)

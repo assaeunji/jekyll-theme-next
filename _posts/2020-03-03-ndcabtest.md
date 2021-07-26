@@ -7,7 +7,7 @@ tag: [ndc, A/B test, review]
 comments: true
 ---
 
-* 이 글은 [NDC (Nexon Developers Conference)](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0021.html#c=NDC2019&k%5B%5D=A%2FB) 홈페이지에서 YouTube 영상을 보고 관심 있던 주제인 A/B 테스트를 현업에서 어떻게 사용하는 지에 대해 정리한 글입니다. 
+* 이 글은 [NDC (Nexon Developers Conference)](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0021.html#c=NDC2019&k%5B%5D=A%2FB){:target="_blank"} 홈페이지에서 YouTube 영상을 보고 관심 있던 주제인 A/B 테스트를 현업에서 어떻게 사용하는 지에 대해 정리한 글입니다. 
 * 다음 방침에 따라 권리자명과 홈페이지를 출처로 밝힘을 알립니다.
 > **NDC 저작권 방침**: 저작물을 개인 블로그, 페이스북 등 SNS에 게재하길 원하시는 경우에는 반드시 권리자명 및 본 홈페이지를 출처로 명시하여야 하고, 해당 저작물을 변형시키지 않는 전제 하에서 게재하실 수 있습니다.
 
@@ -18,7 +18,7 @@ comments: true
 ![](../../images/pubg-1.png)
 
 * 강연자: 이현섭
-* 링크: [NDC 2019 Replay 이현섭님 발표](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0012.html#c=NDC2019&t%5B%5D=%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D)
+* 링크: [NDC 2019 Replay 이현섭님 발표](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0012.html#c=NDC2019&t%5B%5D=%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D){:target="_blank"}
 
 ---
 
@@ -132,7 +132,7 @@ comments: true
 ## **데브시스터즈: 어머님, A/B 테스트를 댁으로 들이십시오**
 
 * 강연자: 오우택, 김민수
-* 링크: [NDC Replay 오우택, 김민수님 발표](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0021.html#c=NDC2019&t%5B%5D=%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D&p=2)
+* 링크: [NDC Replay 오우택, 김민수님 발표](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0021.html#c=NDC2019&t%5B%5D=%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D&p=2){:target="_blank"}
 
 ![](../../images/cookie-0.png)
 
@@ -333,7 +333,7 @@ comments: true
 ## **느낀 점** 
 
 ![](../../images/cookie-conclusion.png)
-[이미지 링크](https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwikoKaS8v3nAhVUyIsBHSSoA6UQjRx6BAgBEAQ&url=https%3A%2F%2Fgongu-s2.tistory.com%2F1130&psig=AOvVaw2GjW5qn4n3zFf60ml1sxI9&ust=1583309872952036)
+[이미지 링크](https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwikoKaS8v3nAhVUyIsBHSSoA6UQjRx6BAgBEAQ&url=https%3A%2F%2Fgongu-s2.tistory.com%2F1130&psig=AOvVaw2GjW5qn4n3zFf60ml1sxI9&ust=1583309872952036){:target="_blank"}
 {:.figure}
 
 1. A/B 테스트의 본질은 파이프라인의 개발

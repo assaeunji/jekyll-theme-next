@@ -6,7 +6,7 @@ categories: [Review]
 tag: [games, match-making, ndc]
 comments: true
 ---
-* 이 글은 [NDC (Nexon Developers Conference)](http://ndcreplay.nexon.com/index.html#) 홈페이지에서 YouTube 영상을 보고 관심 있던 주제인 매치 메이킹을 현업에서 어떻게 사용하는 지에 대해 정리한 글입니다. 
+* 이 글은 [NDC (Nexon Developers Conference)](http://ndcreplay.nexon.com/index.html#){:target="_blank"} 홈페이지에서 YouTube 영상을 보고 관심 있던 주제인 매치 메이킹을 현업에서 어떻게 사용하는 지에 대해 정리한 글입니다. 
 * 다음 방침에 따라 권리자명과 홈페이지를 출처로 밝힘을 알립니다.
 > **NDC 저작권 방침**: 저작물을 개인 블로그, 페이스북 등 SNS에 게재하길 원하시는 경우에는 반드시 권리자명 및 본 홈페이지를 출처로 명시하여야 하고, 해당 저작물을 변형시키지 않는 전제 하에서 게재하실 수 있습니다.
 
@@ -17,7 +17,7 @@ comments: true
 ![](../../images/matchmaking-1.png)
 
 * 강연자: 성의경
-* 링크: [NDC 2019 Replay 성의경님 발표](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0046.html#c=NDC2019&k%5B%5D=%EB%A7%A4%EC%B9%AD)
+* 링크: [NDC 2019 Replay 성의경님 발표](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0046.html#c=NDC2019&k%5B%5D=%EB%A7%A4%EC%B9%AD){:target="_blank"}
 
 ---
 ### 문제 정의
@@ -44,7 +44,7 @@ comments: true
 실력 점수는 초기값에서 시작해서 게임 결과가 예상과 일치하는 방향으로 점수를 갱신합니다. 
 
 구체적인 실력 점수의 예시는 **Elo 실력점수 체계**입니다. tmi로 "일로"라 읽을 줄 알았는데 "엘뢰"이네요! 
-미국의 물리학 교수이자 체스 플레이어인 "아르파드 엘뢰" 교수님이 착안한 방법이라 합니다. ([`[link]`](https://namu.wiki/w/Elo%20%EB%A0%88%EC%9D%B4%ED%8C%85))
+미국의 물리학 교수이자 체스 플레이어인 "아르파드 엘뢰" 교수님이 착안한 방법이라 합니다. ([`[link]`](https://namu.wiki/w/Elo%20%EB%A0%88%EC%9D%B4%ED%8C%85){:target="_blank"})
 
 ![](../../images/matchmaking-elo.png)
 
@@ -143,7 +143,7 @@ $$
 ## **느낀 점** 
 
 ![](../../images/cookie-conclusion.png)
-[이미지 링크](https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwikoKaS8v3nAhVUyIsBHSSoA6UQjRx6BAgBEAQ&url=https%3A%2F%2Fgongu-s2.tistory.com%2F1130&psig=AOvVaw2GjW5qn4n3zFf60ml1sxI9&ust=1583309872952036)
+[이미지 링크](https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwikoKaS8v3nAhVUyIsBHSSoA6UQjRx6BAgBEAQ&url=https%3A%2F%2Fgongu-s2.tistory.com%2F1130&psig=AOvVaw2GjW5qn4n3zFf60ml1sxI9&ust=1583309872952036){:target="_blank"}
 {:.figure}
 
 1. 매치 메이킹, 생각보다 쉽지 않을 것 같습니다. 여기서 매치메이킹이 얼마나 잘 됐나 평가할 때 **정확도**를 사용하는데, 이보단 각 매치 메이킹마다 유저가 만족한 정도도 정량적으로 파악하는 지표가 필요해 보입니다.

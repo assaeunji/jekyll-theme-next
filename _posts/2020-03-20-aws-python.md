@@ -10,7 +10,7 @@ comments: true
 
 * [이전 포스팅](../2020-03-16-aws.md)에 이어 EC2 인스턴스에 Python과 Jupyter Notebook을 설치하고 
 서버 주소를 통해 EC2 인스턴스에 생성한 주피터 노트북에 접속하는 방법에 대해 알아보겠습니다.
-* 이 글은 [잔재미코딩](https://www.fun-coding.org/AWS5.html), [개발자지망생님의 vi 명령어 정리](https://blockdmask.tistory.com/25), [안경잡이 개발자님의 AWS EC2에서 Jupyter Notebook 개발환경 구축하는 방법](https://ndb796.tistory.com/250)을 참조하였습니다.
+* 이 글은 [잔재미코딩](https://www.fun-coding.org/AWS5.html){:target="_blank"}, [개발자지망생님의 vi 명령어 정리](https://blockdmask.tistory.com/25){:target="_blank"}, [안경잡이 개발자님의 AWS EC2에서 Jupyter Notebook 개발환경 구축하는 방법](https://ndb796.tistory.com/250){:target="_blank"}을 참조하였습니다.
 * 이 글은 Windows 기반 환경에서 설정되었습니다.
 
 ---
@@ -79,7 +79,7 @@ vi ~/.jupyter/jupyter_notebook_config.py
 `vi`명령어를 쓰면 이와 같이 `jupyter_notebook_config.py`파일이 뜹니다. 
 모두 `#`으로 주석 처리가 되어있기 때문에 Configuration이 빈 파일입니다.
 
-이를 수정하는 방법은 linux에서 사용하는 `vi 편집기`와 같은 명령으로 수정할 수 있고 정리하자면 다음과 같습니다. 참고로 `vi` 명령어들은 [개발자지망생님의 vi 명령어 정리](https://blockdmask.tistory.com/25) 글을 참조하였습니다.
+이를 수정하는 방법은 linux에서 사용하는 `vi 편집기`와 같은 명령으로 수정할 수 있고 정리하자면 다음과 같습니다. 참고로 `vi` 명령어들은 [개발자지망생님의 vi 명령어 정리](https://blockdmask.tistory.com/25){:target="_blank"} 글을 참조하였습니다.
 
 이 순서로 키보드를 누릅니다.
 1. `Shift+G`: `jupyter_notebook_config.py`의 파일의 끝 줄로 이동합니다.

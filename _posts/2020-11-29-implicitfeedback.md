@@ -9,7 +9,7 @@ comments: true
 
 ![Jesse님께 허락을 받고 쓴 글 인증](../../images/jesse-allow.png)
 
-* 이 글은 Jesse님의 허락을 받고 A Gentle Introduction to Recommender Systems with Implicit Feedback [`[link]`](https://jessesw.com/Rec-System/)을 번역한 글입니다.
+* 이 글은 Jesse님의 허락을 받고 A Gentle Introduction to Recommender Systems with Implicit Feedback [`[link]`](https://jessesw.com/Rec-System/){:target="_blank"}을 번역한 글입니다.
 
 ---
 ## 추천 시스템 소개
@@ -58,7 +58,7 @@ comments: true
 
 그러나, 대부분 사람들은 평점을 전혀 남기지 않는다는 문제가 있습니다! 따라서, 사용가능한 데이터가 매우 희귀합니다. 그 대신 Netflix는 최소한 유저가 어떤 콘텐츠를 시청했는지의 정보를 얻을 수 있습니다. 이런 시청 정보에 대한 데이터는 암시적 상호작용입니다. 그러나, 이 유저가 특정 프로그램을 시청했다고 해서 그 프로그램을 좋아한다고 말하기 어렵습니다. 따라서, 명시적 상호작용에 비해 암시적 상호작용은 어떤 콘텐츠를 선호하는지 추천하는 일이 더 어려운 일입니다.
 
-이런 단점에도 불구하고, 암시적 피드백은 중요합니다. Hulu라는 회사에서는 [추천 시스템에 대한 기사](http://tech.hulu.com/blog/2011/09/19/recommendation-system/)에서 다음과 같이 언급합니다.
+이런 단점에도 불구하고, 암시적 피드백은 중요합니다. Hulu라는 회사에서는 [추천 시스템에 대한 기사](http://tech.hulu.com/blog/2011/09/19/recommendation-system/){:target="_blank"}에서 다음과 같이 언급합니다.
 
 > Hulu에서의 암시적 데이터의 양은 명시적 피드백의 양을 압도하기 때문에, 우리의 추천 시스템은 암시적 피드백 데이터를 갖고 우선적으로 설계되어야 한다.
 
@@ -87,12 +87,12 @@ ALS는 한 번에 한 특징 벡터 (feature vector)만 추출하기만 하면 �
 * 다시 돌아가 $V$의 해를 이용해 $U$의 해를 구합니다. 
 * $R$을 최대한 근사시키는 수렴 값을 얻을 때까지 반복합니다.
 
-이 연산이 끝나면  $U$와 $V$를 곱해 특정한 유저/아이템 상호작용에 대한 평점을 예측할 수 있습니다. 이것이 Hu, Koren, and Volinsky의 [Collaborative Filtering for Implicit Feedback Datasets](http://yifanhu.net/PUB/cf.pdf)에서 사용한 ALS 방법입니다. 이제 이 논문에서 사용된 방법을 실제 데이터에 적용해보고, 추천 시스템을 구축해보겠습니다.
+이 연산이 끝나면  $U$와 $V$를 곱해 특정한 유저/아이템 상호작용에 대한 평점을 예측할 수 있습니다. 이것이 Hu, Koren, and Volinsky의 [Collaborative Filtering for Implicit Feedback Datasets](http://yifanhu.net/PUB/cf.pdf){:target="_blank"}에서 사용한 ALS 방법입니다. 이제 이 논문에서 사용된 방법을 실제 데이터에 적용해보고, 추천 시스템을 구축해보겠습니다.
 
 ---
 ## 데이터 설명
 
-예시는 "Online Retail"라 불리는 데이터 셋으로, UCI Machine Learning repository에서 가져왔습니다 ([여기](https://archive.ics.uci.edu/ml/datasets/Online+Retail)에서 해당 데이터를 찾을 수 있습니다). 이 데이터는 영국에 있는 온라인 소매 기업의 8개월 간의 구매 기록을 담고 있습니다.
+예시는 "Online Retail"라 불리는 데이터 셋으로, UCI Machine Learning repository에서 가져왔습니다 ([여기](https://archive.ics.uci.edu/ml/datasets/Online+Retail){:target="_blank"}에서 해당 데이터를 찾을 수 있습니다). 이 데이터는 영국에 있는 온라인 소매 기업의 8개월 간의 구매 기록을 담고 있습니다.
 
 먼저 필요한 라이브러리를 불러오고 데이터를 로드하겠습니다.
 
@@ -254,7 +254,7 @@ product_train, product_test, product_users_altered = make_train(purchase_sparse,
 
 ---
 ## 암시적 피드백을 위한 ALS 알고리즘 구현하기 (손코딩)
-[Collaborative Filtering for Implicit Feedback Datasets](http://yifanhu.net/PUB/cf.pdf)에서 ALS 관련 수식은 다음과 같습니다.
+[Collaborative Filtering for Implicit Feedback Datasets](http://yifanhu.net/PUB/cf.pdf){:target="_blank"}에서 ALS 관련 수식은 다음과 같습니다.
 
 먼저, 희소 평점 행렬 (`product_train`)을 신뢰 행렬 (Confidence matrix)로 만듭니다.
 
@@ -588,11 +588,11 @@ def rec_items(customer_id, mf_train, user_vecs, item_vecs, customer_list, item_l
 이 둘을 비교해보면 12361 id를 가진 유저는 식기 세트 (cutlery set)를 많이 구매했는데, 추천 목록에서는 아직 구매하지 않은 핑크색, 빨간색 식기 세트를 추천하고 있습니다. 또한 가족 앨범을 위한 사진틀이 1순위로 추천됐는데 아마도 해당 유저가 구매한 아이템들이 가족을 가진 아내들이 많이 사는 아이템이지 않을까 싶습니다. 이렇게 추천 시스템이 보기에도 알맞게 추천되고 있음을 확인할 수 있습니다.
 
 
-이 글에서는 어떻게 암시적 피드백 데이터에서 추천 시스템이 작동하는지를 배웠습니다. 전체 코드는 [여기](https://github.com/assaeunji/recommendation/blob/main/Implicit%20Feedback_OnlineRetail.ipynb)에서 확인하실 수 있습니다.
+이 글에서는 어떻게 암시적 피드백 데이터에서 추천 시스템이 작동하는지를 배웠습니다. 전체 코드는 [여기](https://github.com/assaeunji/recommendation/blob/main/Implicit%20Feedback_OnlineRetail.ipynb){:target="_blank"}에서 확인하실 수 있습니다.
 다음 글에서는 LightFM이라 불리는 파이썬 라이브러리를 이용한 추천 시스템에 대해 파보려 합니다 :>
 
 ----
 ## References
 
-* Jesse Steinweg-Woods, "A Gentle Introduction to Recommender Systems with Implicit Feedback" [`[link]`](https://jessesw.com/Rec-System/)
-* Hu, Koren, and Volinsky, "Collaborative Filtering for Implicit Feedback Datasets" [`[link]`](http://yifanhu.net/PUB/cf.pdf)
+* Jesse Steinweg-Woods, "A Gentle Introduction to Recommender Systems with Implicit Feedback" [`[link]`](https://jessesw.com/Rec-System/){:target="_blank"}
+* Hu, Koren, and Volinsky, "Collaborative Filtering for Implicit Feedback Datasets" [`[link]`](http://yifanhu.net/PUB/cf.pdf){:target="_blank"}

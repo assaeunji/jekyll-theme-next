@@ -18,7 +18,7 @@ photos:
 ---
 ## 2020년 상반기 회고
 
-[2019년 회고 & 2020년 계획](https://assaeunji.github.io/diary/2020-02-25-geultto/)에 썼던 제 계획은 다음과 같습니다.
+[2019년 회고 & 2020년 계획](https://assaeunji.github.io/diary/2020-02-25-geultto/){:target="_blank"}에 썼던 제 계획은 다음과 같습니다.
 
 1. 글또 활동
    1. 예치금 안 깎이고 글 쓰기: 4일에 한 번 글쓰기 (?)
@@ -31,7 +31,7 @@ photos:
 **과연... 잘 지켰을까요?**
 
 ![](../../images/halfofyear-conan.jpg)
-이미지 출처 [`[link]`](https://blog.naver.com/PostView.nhn?blogId=ooo---ooo&logNo=221101664741)
+이미지 출처 [`[link]`](https://blog.naver.com/PostView.nhn?blogId=ooo---ooo&logNo=221101664741){:target="_blank"}
 {:.figure}
 
 
@@ -75,9 +75,9 @@ photos:
 
 | 주제 | 참조 |
 |:---------------|:----------|
-| 1. MongoDB 강좌 내용 정리 | [Inflearn NoSQL/DB(몽고DB)기초와 파이썬활용 강좌](https://www.inflearn.com/course/nosql-%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EB%AA%BD%EA%B3%A0DB-%EC%9E%94%EC%9E%AC%EB%AF%B8%EC%BD%94%EB%94%A9), [잔재미 코딩](https://www.fun-coding.org/)|
-| 2. (Bayesian) A/B Testing 공부 | [프로그래머를 위한 베이지안 with 파이썬](https://github.com/gilbutITbook/006775), [Udacity A/B testing 강의](https://classroom.udacity.com/courses/ud257)|
-| 3. 게임 상 or 채팅 환경에서의 이상 / 어뷰징 탐지 알고리즘 공부| [NDC 2016 김정주님 발표](https://www.slideshare.net/ssuser163469/ndc-2016-61452271), [Sualab Anomaly Detection 소개글](http://research.sualab.com/introduction/review/2020/01/30/anomaly-detection-overview-1.html)|
+| 1. MongoDB 강좌 내용 정리 | [Inflearn NoSQL/DB(몽고DB)기초와 파이썬활용 강좌](https://www.inflearn.com/course/nosql-%ED%8C%8C%EC%9D%B4%EC%8D%AC-%EB%AA%BD%EA%B3%A0DB-%EC%9E%94%EC%9E%AC%EB%AF%B8%EC%BD%94%EB%94%A9){:target="_blank"}, [잔재미 코딩](https://www.fun-coding.org/)|
+| 2. (Bayesian) A/B Testing 공부 | [프로그래머를 위한 베이지안 with 파이썬](https://github.com/gilbutITbook/006775){:target="_blank"}, [Udacity A/B testing 강의](https://classroom.udacity.com/courses/ud257){:target="_blank"}|
+| 3. 게임 상 or 채팅 환경에서의 이상 / 어뷰징 탐지 알고리즘 공부| [NDC 2016 김정주님 발표](https://www.slideshare.net/ssuser163469/ndc-2016-61452271){:target="_blank"}, [Sualab Anomaly Detection 소개글](http://research.sualab.com/introduction/review/2020/01/30/anomaly-detection-overview-1.html){:target="_blank"}|
 {:.scroll-table}
 
 2번과 3번은 어느 정도 맛보기로 글을 썼는데 1. MongoDB는 하지 못했습니다. 
@@ -94,7 +94,7 @@ photos:
 
 진로를 정하는 것, 그 중에서도 **첫** 진로를 정하는 것은 매우 중요합니다. "마음에 안 들면 이직하면 되지"라 생각할 수 있지만, 주변 친구들의 말을 들어보면 이직이 그냥 쉽게 되는 것이 아닙니다. 최소 경력을 3년 채우고, 전 직장 경력을 잘 살려서 포트폴리오를 작성해야 더 나은 직장으로 갈 수 있기 때문입니다. 이직을 목적으로 두지 않더라도 **공식적인 제 커리어를 처음으로 결정하는 곳**이기 때문에 신중하게 첫 진로를 정해야 합니다.
 
- 진로 선택하는 데 있어 [변성윤님의 성장을 좋아하는 사람이 성장하고 싶은 사람에게 PT](https://www.slideshare.net/zzsza/ss-173453051)를 비롯해 여러 조언들로 많은 도움을 받았습니다. 이를 통해 가고 싶은 회사의 **우선순위**를 아래와 같은 기준을 통해 정할 수 있었습니다.
+ 진로 선택하는 데 있어 [변성윤님의 성장을 좋아하는 사람이 성장하고 싶은 사람에게 PT](https://www.slideshare.net/zzsza/ss-173453051){:target="_blank"}를 비롯해 여러 조언들로 많은 도움을 받았습니다. 이를 통해 가고 싶은 회사의 **우선순위**를 아래와 같은 기준을 통해 정할 수 있었습니다.
 * 산업군
 * 회사 내의 데이터 관련 부서의 중요도
 * 워라밸 (Work & Life Balance)
@@ -141,7 +141,7 @@ photos:
 취업 준비를 메인으로 해야 하기 때문에, "시간을 많이 안 뺏기면서도 돈을 벌 수 있는" 수입원을 찾는데 노력했습니다.
 결과적으로 제가 찾은 수입원은 **구직활동지원금**입니다.
 
-구직활동지원금은 [온라인 청년센터](https://www.youthcenter.go.kr/seekActvSptfndAppl/aboutThis.do)에서 신청 가능하고, 한 달에 50만원씩 카드 포인트 형태로 지급됩니다.
+구직활동지원금은 [온라인 청년센터](https://www.youthcenter.go.kr/seekActvSptfndAppl/aboutThis.do){:target="_blank"}에서 신청 가능하고, 한 달에 50만원씩 카드 포인트 형태로 지급됩니다.
 그말인 즉슨 현금화가 거의 불가능하기 때문에 (신청하면 가능), 이체가 불가능하고 주류를 파는 업소에서는 사용이 불가능합니다.
 따라서, 생활비, 교통비, 교육비 등을 충당하기엔 적당하나 친구들과의 술자리로 인한 지출, 핸드폰 요금은 구직활동지원금을 통해 충당할 수 없었습니다.
 그래서 저는 **숨고**에서 통계 컨설턴트를 하면서 이러한 비용을 충당할 수 있었습니다.
@@ -182,7 +182,7 @@ Notion에 썼던 일기
 ## 현재의 나
 
 ![](../../images/halfofyear-nogeungjung.png)
-이미지 출처 [`[link]`](https://www.google.com/url?sa=i&url=http%3A%2F%2Fm.blog.naver.com%2Fnawon5474%2F220470503720&psig=AOvVaw2ZXaL44dNJNr7tCNcEAA7z&ust=1595158755416000&source=images&cd=vfe&ved=0CA0QjhxqFwoTCPCzs9zb1uoCFQAAAAAdAAAAABAD)
+이미지 출처 [`[link]`](https://www.google.com/url?sa=i&url=http%3A%2F%2Fm.blog.naver.com%2Fnawon5474%2F220470503720&psig=AOvVaw2ZXaL44dNJNr7tCNcEAA7z&ust=1595158755416000&source=images&cd=vfe&ved=0CA0QjhxqFwoTCPCzs9zb1uoCFQAAAAAdAAAAABAD){:target="_blank"}
 {:.figure} 
 
 아주 행복합니다 -! 언제 그렇게 우울한 적이 있는지 모를 정도로 모든게 감사하고 좋습니다. 
