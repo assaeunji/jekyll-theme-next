@@ -1,12 +1,12 @@
 ---
 layout: post
 title: "시계열 분석 시리즈 (1): 정상성 (Stationarity) 뽀개기"
-date:
-categories: []
-tag: []
+date: 2021-08-08
+categories: [ML]
+tag: [stationarity, time-series, python, stock-prices, data-analysis, pyspark, easy-guide]
 comments: true
 photos:
-    - "../../images/casual-title.png"
+    - "../../images/stationarity-title.png"
 ---
 
 
@@ -158,11 +158,10 @@ $$
 로그 변환은 특히 값의 변동 자체가 큰 경우 (= 분산이 큰 경우) 고려할 수 있는 방법입니다. 또한, GDP와 같은 많은 경제 시게열 자료가 근사적으로 **지수적인 성장**을 나타내고 있는 경우가 많기 때문에 이런 시계열 자료에 로그를 취해 선형적인 값으로 바꿔주는 효과 또한 있습니다.
 
 그러나, 로그 변환을 통해 어떤 시계열 자료가 선형적인 추세를 보인다면 시간이 지남에 따라 평균이 일정하지 않고 증가한다는 뜻이기 때문에, 이 또한 정상성을 띠지 않는 문제가 있습니다. 
-
 그럼 뭐야? 라고 생각이 들겠지만 다음 장에서 그 해답을 찾을 수 있습니다.
 
 ---
-### 로그 변환 + 차분 
+### 로그 변환 + 차분 (로그 차분)
 
 ![](../../images/stationarity-ppap.jpg)
 
@@ -418,7 +417,7 @@ ss.tail()
 ![](../../images/stationarity-candle.png)
 
 
-다시 본론으로 들어와서 삼성 전자의 봉 차트를 그리면 이런 우상향하는 모습을 볼 수 있습니다.
+다시 본론으로 들어와서 삼성 전자의 봉 차트를 그리면 이런 **우상향하는 모습**을 볼 수 있습니다.
 
 ```python
 ss_candlestick = go.Candlestick(x=ss.index
@@ -433,7 +432,160 @@ go.Figure(data = [ss_candlestick], layout = layout)
 ![](../../images/stationarity-candless.png)
 
 
+우상향하면 뭐다? 트렌드가 존재한다는 의미이므로, 정상성을 만족하지 않는다 추측할 수 있습니다.
+따라서 정상성을 만족시키기 위해 삼성 주가의 종가 (`Close`)에 차분과 로그 변환, 그리고 로그 차분 (로그 변환 후 차분)을 시도해봅니다.
+
+```python
+# 차분
+ss['diff_close'] = ss['Close'].diff(1)
+# 로그
+ss['log_close'] = np.log(ss['Close'])
+# 로그차분
+ss['logdiff_close'] = np.log(ss['Close']).diff(1)
+
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+
+fig = make_subplots(4,1)
+
+fig.add_trace(go.Scatter(x=ss.index, y=ss.Close,name = "삼성 주가"),row=1,col=1)
+fig.add_trace(go.Scatter(x=ss.index, y=ss.diff_close,name = "삼성 주가 차분값"), row=2,col=1)
+fig.add_trace(go.Scatter(x=ss.index, y=ss.log_close,name = "log(삼성 주가)"), row=3,col=1)
+fig.add_trace(go.Scatter(x=ss.index, y=ss.logdiff_close,name = "log(삼성주가) 차분값"), row=4,col=1)
+
+fig.update_layout(height=600, width=800, title_text="삼성 주가")
+fig.show()
+```
+
+![](../../images/stationarity-logdiff.png)
+
+* 위 그림에서 보면 삼성 주가에서 차분을 하면 그래프가 0을 부근으로 위 아래로 왔다갔다하는 평균 회귀 (Mean Reverting) 성질을 지닙니다.
+그러나 과거에는 상승 감소 폭이 $\pm$ 2000이었다면, 현재는 -2000 ~ 6000까지 커졌기 때문에 과거와 현재의 분산이 비슷한지는 약간 애매합니다.
+* 로그 변환을 했더니 여전히 원 그래프처럼 상승하는 트렌드를 보입니다. 대신에 원 그래프는 20,000원 ~ 80,000원으로 상승폭이 크지만, 로그 변환을 하니 10 ~ 11.xx로 분산이 안정화된 것을 알 수 있죠.
+* PPAP 전법을 통해 로그 차분을 한 그래프는 차분한 그래프에 비해 더 분산이 안정화된 모습을 보입니다.
+
+그럼 이 네 지수 (`Close, diff_close, log_close, logdiff_close`)의 정상성을 검증해봅시다.
+
+먼저 원 그래프 (왼쪽)와 ACF (오른쪽)를 그리면 다음과 같습니다.
+
+```python
+from matplotlib import rc
+rc('font', family='AppleGothic')
+plt.rcParams['axes.unicode_minus'] = False
+
+fig,ax = plt.subplots(4,2, figsize=(12,16))
+ax[0,0].plot(ss['Close'])
+ax[0,0].set_title('삼성 주가')
+ax[1,0].plot(ss['log_close'])
+ax[1,0].set_title('log(삼성주가)')
+ax[2,0].plot(ss['diff_close'])
+ax[2,0].set_title('삼성 주가 차분값')
+ax[3,0].plot(ss['logdiff_close'])
+ax[3,0].set_title('log(삼성 주가) 차분값')
+
+plot_acf(ss['Close'],ax=ax[0,1])
+plot_acf(ss['log_close'],ax=ax[1,1])
+plot_acf(ss['diff_close'][1:],ax=ax[2,1])
+plot_acf(ss['logdiff_close'][1:],ax=ax[3,1])
+
+plt.show()
+```
+
+![](../../images/stationarity-ssacf.png)
+
+삼성 주가와, 로그 변환을 한 log(삼성 주가)의 ACF는 시간이 지날수록 감소하긴 하지만 아주 더디게 감소하고 있습니다. 시계열 그래프가 선형적으로 증가하는 경우 이러한 그래프를 띠며, 이 때 허용 범위 (파란색 음영) 안에 ACF 값들이 들어오지 않기 때문에 정상성을 띠지 않는다고 볼 수 있습니다.
+
+이에 비해서 삼성 주가 차분값과, log(삼성 주가) 차분값의 ACF는 0인 시점에서 1의 자기 상관을 가지고, lag = 1 이후로부터는 급격하게 자기 상관이 줄어든 것을 확인할 수 있습니다.
+몇 군데 (lag = 17, 25) 상에서 허용 범위 밖에 자기 상관이 있긴 하지만, 대부분의 시차에서 자기 상관이 허용 범위 안에 들어와있는 것을 알 수 있습니다.
+
+결과적으로, **ACF만 봤을 때 삼성 주가와 log (삼성 주가)는 정상성을 띠지 않을 것이고, 삼성 주가 차분값과 log(삼성 주가) 차분값은 정상성을 띨 것이라 예상할 수 있습니다.**
+
+이제, 두 번째 방법인 가설 검정 방법으로 정상성을 검증해보고자 합니다.
+파이썬의 `adfuller` 모듈을 이용하면 ADF 검정 (Augmented Dicky-Fuller Test)을 쉽게 사용할 수 있습니다.
+
+```python
+from statsmodels.tsa.stattools import adfuller
+
+def print_adfuller (x):
+    result = adfuller(x)
+    print(f'ADF Statistic: {result[0]:.3f}')
+    print(f'p-value: {result[1]:.3f}')
+    print('Critical Values:')
+    for key, value in result[4].items():
+        print('\t%s: %.3f' % (key, value))
+
+print_adfuller(ss['Close']) ## 정상성 만족 X
+print("-"*30)
+print_adfuller(ss['log_close']) ## 정상성 만족 X
+print("-"*30)
+print_adfuller(ss['diff_close'][1:]) ## 정상성 만족
+print("-"*30)
+print_adfuller(ss['logdiff_close'][1:]) ## 정상성 만족
+print("-"*30)
+```
+
+```python
+[Close]
+ADF Statistic: -0.361
+p-value: 0.916
+Critical Values:
+	1%: -3.434
+	5%: -2.863
+	10%: -2.568
+------------------------------
+[log_close]
+ADF Statistic: -0.643
+p-value: 0.861
+Critical Values:
+	1%: -3.434
+	5%: -2.863
+	10%: -2.568
+------------------------------
+[diff_close]
+ADF Statistic: -8.736
+p-value: 0.000
+Critical Values:
+	1%: -3.434
+	5%: -2.863
+	10%: -2.568
+------------------------------
+[logdiff_close]
+ADF Statistic: -24.766
+p-value: 0.000
+Critical Values:
+	1%: -3.434
+	5%: -2.863
+	10%: -2.568
+------------------------------
+```
 
 
+검정 결과를 보면 삼성 주가 (`Close`)와 로그 변환을 한 log(삼성 주가) (`log_close`)의 `pvalue`는 모두 0.05보다 크기 때문에 귀무가설을 기각하지 못하여, 정상성을 만족하지 못한다 말할 수 있습니다.
+이에 비해 삼성 주가 차분값 (`diff_close`)와 로그 차분값 (`logdiff_close`)의 `pvalue`는 거의 0이기 때문에 귀무가설을 기각하여, 정상성을 만족한다고 볼 수 있습니다.
+참고로 차분값의 경우 첫 번째 값이 NA이기 때문에 `[1:]`을 통해 두 번째 값부터 가져와서 ADF 검정을 시행하였습니다.
 
+ADF 검정도 결과적으로 **삼성 주가와 log (삼성 주가)는 정상성을 띠지 않고, 삼성 주가 차분값과 log(삼성 주가) 차분값은 정상성을 띤다는 결론을 도출하였습니다.**
 
+---
+### 여담
+
+최근에 삼성 주가가 **제자리 걸음** 중인데요. 혹시 최근 한 달 간의 주가 자체도 정상성을 띠지 않을까? 하여 ACF를 그려보았습니다.
+
+```python
+fig,(ax1,ax2) = plt.subplots(1,2, figsize=(14,4))
+ax1.plot(ss['Close'][-30:])
+plot_acf(ss['Close'][-30:],ax=ax2)
+plt.show()
+```
+
+![](../../images/stationarity-thesedays.png)
+
+진짜로! lag=1만 허용 범위 밖이고, 나머지 lag에서는 허용 범위 안인 것 아니겠어요? 
+ADF 검정 결과를 보면 p-value가 0.864로 나와서 진짜 정상성을 띠는 것은 아니긴 합니다. 아마도 ACF를 보면 물결 모양처럼 나와서 그렇지 않을까 생각이 드네요.
+아무튼! ACF가 빽빽하게 감소하는 모습이었으면...하는 바람이었습니다. (우상향 가즈아-!)
+
+ 
+---
+## References
+* [실전 시계열 분석: 통계와 머신러닝을 활용한 예측 기법](http://www.yes24.com/Product/Goods/98576347)
+* [Forecasting: Principles and Practice](https://otexts.com/fppkr/)
