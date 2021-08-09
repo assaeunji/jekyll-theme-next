@@ -6,7 +6,7 @@ categories: [ML]
 tag: [stationarity, time-series, python, stock-prices, data-analysis, pyspark, easy-guide]
 comments: true
 photos:
-    - "../../images/stationarity-title.png"
+    - "../../images/stationarity-title_new.png"
 ---
 
 
@@ -29,8 +29,6 @@ photos:
 
 ---
 ### 정상성의 정의
-
-![](../../images/.png)
 
 > 정상성 (定常性)은 "안정되다"라는 뜻을 가진 정 (定)과 "항상"이라는 뜻을 가진 상 (常)의 한자를 가져, "**일정하여 늘 한곁같은 성질**"을 의미합니다. 이 단어 뜻에 맞게 
 정상성을 가진 시계열은 과거와 현재와 미래의 모두 항상 안정적인, 일정한 분포를 가진 것이 특징입니다.
