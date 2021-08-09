@@ -10,7 +10,7 @@ photos:
 ---
 
 
-* 이번 포스팅은 [실전 시계열 분석: 통계와 머신러닝을 활용한 예측 기법](http://www.yes24.com/Product/Goods/98576347) 책과 [Forecasting: Principles and Practice](https://otexts.com/fppkr/)책을 기반으로 정상성에 대해 자세하게 정리하였습니다.
+* 이번 포스팅은 [실전 시계열 분석: 통계와 머신러닝을 활용한 예측 기법](http://www.yes24.com/Product/Goods/98576347){:target='_blank'} 책과 [Forecasting: Principles and Practice](https://otexts.com/fppkr/){:target='_blank'}책을 기반으로 정상성에 대해 자세하게 정리하였습니다.
 
 ---
 ## 정상성: 통계적 시계열 분석에 필요한 가정
@@ -592,5 +592,5 @@ ADF 검정 결과를 보면 p-value가 0.864로 나와서 진짜 정상성을 �
  
 ---
 ## References
-* [실전 시계열 분석: 통계와 머신러닝을 활용한 예측 기법](http://www.yes24.com/Product/Goods/98576347)
-* [Forecasting: Principles and Practice](https://otexts.com/fppkr/)
+* [실전 시계열 분석: 통계와 머신러닝을 활용한 예측 기법](http://www.yes24.com/Product/Goods/98576347){:target='_blank'}
+* [Forecasting: Principles and Practice](https://otexts.com/fppkr/){:target='_blank'}
