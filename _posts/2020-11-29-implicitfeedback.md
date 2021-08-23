@@ -2,7 +2,7 @@
 layout: post
 title: Implicit Feedback 추천 시스템에 대한 친절한 설명
 date: 2020-11-29
-categories: [ML]
+categories: [Machine Learning]
 tag: [recommender-system, ALS, implicit-feedback, ml, python, pyspark]
 comments: true
 ---

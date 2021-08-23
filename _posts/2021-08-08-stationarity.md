@@ -2,7 +2,7 @@
 layout: post
 title: "시계열 분석 시리즈 (1): 정상성 (Stationarity) 뽀개기"
 date: 2021-08-08
-categories: [ML]
+categories: [Statistics]
 tag: [stationarity, time-series, python, stock-prices, data-analysis, pyspark, easy-guide]
 comments: true
 photos:
