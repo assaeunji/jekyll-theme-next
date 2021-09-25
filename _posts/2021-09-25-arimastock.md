@@ -11,14 +11,14 @@ photos:
 
 * ARIMA 예측이 일직선으로 되신다구요? 이 글을 보면 어느 정도 그 이유와 해결 방법을 찾을 수 있습니다.
 * 이번 포스팅에서는 [시계열 분석 시리즈 (3): auto_arima를 잘 쓰기 위한 배경 지식](https://assaeunji.github.io/statistics/2021-09-08-arimapdq/){:target='_blank'}에 이어 실제로 auto_arima로 삼성전자의 주가를 예측한 과정을 정리하였습니다.. (~~응또삼; 응지 또 삼성전자 주가...~~)
-* [`pmdarima` 공식페이지](https://alkaline-ml.com/pmdarima/index.html){:target='_blank'}와, 여기에 있는 [10.1. Stock Market Prediction](https://alkaline-ml.com/pmdarima/usecases/stocks.html){:target='_blank'} 예시를 주로 참조하였습니다.
+* [pmdarima 공식페이지](https://alkaline-ml.com/pmdarima/index.html){:target='_blank'}와, 여기에 있는 [10.1. Stock Market Prediction](https://alkaline-ml.com/pmdarima/usecases/stocks.html){:target='_blank'} 예시를 주로 참조하였습니다.
 
 
 ---
 ## auto_arima를 활용한 ARIMA 적합 및 예측 과정 요약
 
-`auto_arima` 함수는 Python의 `pmdarima` 라이브러리에 있는 함수로, 
-ARIMA 모형의 차수 p,d,q와 계수를 자동으로 추정해주는 함수로 R의 `auto.arima` 함수를 본따 만들어졌습니다. 
+auto_arima 함수는 R의 `auto.arima` 함수를 본따 만들어진 Python의 pmdarima 라이브러리에 있는 함수로, 
+ARIMA 모형의 차수 p,d,q와 계수를 자동으로 추정해주는 함수입니다.
 그러나 이 "자동"이라는 단어 때문에 단순하게 데이터를 적합만 하면 된다라고 생각할 수 있지만, 
 흘러가는대로 적합하다보면 엉뚱한 예측 결과 (ex. 시간에 따라 예측값이 선형으로 증가하거나 일직선)를 얻곤 합니다.
 
@@ -29,21 +29,20 @@ ARIMA 모형의 차수 p,d,q와 계수를 자동으로 추정해주는 함수로
 **이를 통합했을 때, 전체적인 ARIMA 적합 및 예측 과정은 다음과 같습니다.**
 
 1. **시각화**: 시계열 자료를 시각화해서 **추세, 계절성, 주기**가 있는지 파악합니다. 혹은 데이터를 변환해줄 필요가 있는지 파악합니다.
-   1. **추세**가 있다면 정상성을 만족하지 않기 때문에 몇 차 차분이 적당할지 단위근 검정을 해야 합니다. 이는 `pmdarima.arima`의 `ndiffs` 함수로 쉽게 구할 수 있습니다.
-   2. **계절성**이 있다면 비계절성 ARIMA 대신 [계절성 ARIMA (SARIMA)](https://otexts.com/fppkr/seasonal-arima.html){:target='_blank'}를 따르므로, `auto_arima` 함수의 `seasonal = True`로 지정해주어야 합니다.
-   3. **주기**가 있다면 `auto_arima` 함수의 `m`의 인자에 넣어주어야 합니다. 이는 계절적 주기에 얼마나 많은 관측치가 있는지를 명시하는 파라미터이고, 데이터 분석가가 개입해서 넣어줘야 하는 값 (apriori)입니다. 예를 들어 `m=7`이면 일별 (daily), `m=52`이면 주별 (weekly)<sup>1년에 52주가 있기 때문에 52의 주기를 가집니다!</sup>, `m=12`이면 월별 (monthly) 데이터입니다. 기본값은 `m=1`로, 비계절성 데이터를 의미합니다.
+   1. **추세**가 있다면 정상성을 만족하지 않기 때문에 몇 차 차분이 적당할지 단위근 검정을 해야 합니다. 이는 pmdarima.arima의 `ndiffs` 함수로 쉽게 구할 수 있습니다.
+   2. **계절성**이 있다면 비계절성 ARIMA 대신 [계절성 ARIMA (SARIMA)](https://otexts.com/fppkr/seasonal-arima.html){:target='_blank'}를 따르므로, auto_arima 함수의 `seasonal = True`로 지정해주어야 합니다.
+   3. **주기**가 있다면 auto_arima 함수의 `m`의 인자에 넣어주어야 합니다. 이는 계절적 주기에 얼마나 많은 관측치가 있는지를 명시하는 파라미터이고, 데이터 분석가가 개입해서 넣어줘야 하는 값 (apriori)입니다. 예를 들어 `m = 7`이면 일별 (daily), `m = 52`이면 주별 (weekly)<sup>1년에 52주가 있기 때문에 52의 주기를 가집니다!</sup>, `m = 12`이면 월별 (monthly) 데이터입니다. 기본값은 `m = 1`로, 비계절성 데이터를 의미합니다.
    4. 데이터 변환은 과거와 현재, 미래 데이터를 봤을 때 분산의 차이가 크다면 로그 변환이나 Box-Cox 변환을 고려해볼 수 있습니다.
-2. **모형 적합**: `auto_arima`를 통해 적당한 p,d,q를 추정하고, 계수들을 추정합니다.
+2. **모형 적합**: auto_arima를 통해 적당한 p,d,q를 추정하고, 계수들을 추정합니다.
 3. **잔차 검정**: 잔차가 백색잡음 과정인지 (=정상성을 만족하는지), 정규성 및 등분산성을 만족하는지 파악합니다.
-   1. 모형 적합 후 `summary` 결과에서  Ljung-Box (Q) / Heteroskedasticity (H) / Jarque-Bera (JB) 검정 만족 여부를 파악하실 수 있습니다. 
+   1. `summary` 결과에서  Ljung-Box (Q) / Heteroskedasticity (H) / Jarque-Bera (JB) 검정 만족 여부를 파악하실 수 있습니다. 
    2. `plot_diagnostics` 잔차 그래프로도 정상성과 정규성을 만족하는지 파악하실 수 있습니다.
-4. **모형 refresh 및 예측**: 모형이 잘 적합되었으면 **모형을 refresh**하면서 미래 관측치를 예측합니다. <sup>NEW!! 지난 번 설명에서 업데이트되는 부분입니다!</sup> 주의할 점은 
+4. **모형 refresh 및 예측**: 모형이 잘 적합되었으면 **모형을 refresh**하면서 미래 관측치를 예측합니다. <sup>NEW!! 지난 번 설명에서 업데이트되는 부분!</sup> 주의할 점은 
 한번에 테스트 데이터를 예측하는 것이 아니라, 하나씩 예측하고 관측치를 **업데이트**해주는 과정이 필요하다는 점입니다. 이 부분이 바로 "모형을 refresh"하는 과정입니다.
 5. **모형 평가**: MAPE로 잔차가 실제 값에서 얼마나 벗어나 있는지 파악합니다.
 
 
-**4번에서, 예측을 할 때 왜 모형을 refresh 해줘야 할까요?**
-**refresh**는 말 그대로 "새롭게 하다"라는 의미를 갖고 있는데요.
+**4번에서, 예측을 할 때 왜 모형을 refresh 해줘야 할까요?** "refresh"는 말 그대로 "새롭게 하다"라는 의미를 갖고 있는데요.
 
 ARIMA 모형을 refresh하지 않으면, 시간이 지나도 계속 과거 데이터로 구축한 모형으로 먼 미래를 예측하는 꼴이기 때문에 정확하게 예측하기 어렵습니다.
 예컨대 4년 전 데이터로 ARIMA 모형을 구축해놓고 모형의 업데이트 없이 오늘의 데이터를 예측한다면, 좋은 예측 결과를 내기 어렵겠죠?
@@ -63,7 +62,7 @@ ARIMA 모형을 refresh하지 않으면, 시간이 지나도 계속 과거 데�
 ---
 ## 실전 ! 삼성전자 주가로 ARIMA 최적 모델 찾기
 
-자, 이제 위 과정으로 삼성전자 주가를 `auto_arima`로 예측한 예시에 대해 보여드리겠습니다.
+자, 이제 위 과정으로 삼성전자 주가를 auto_arima로 예측한 예시에 대해 보여드리겠습니다.
 이를 위해 20년 1월부터 21년 8월 30일까지의 일별 삼성전자 주가 데이터를 불러왔습니다.
 
 ```python
@@ -118,7 +117,7 @@ print(f"추정된 차수 d = {n_diffs}")
 ---
 ### Step 2. ARIMA 모형 적합
 
-자, 이제 모델 `auto_arima` 함수로 최적의 모형을 탐색해보겠습니다. 위에서 7:3의 비율로 train과 test 데이터를 나누었습니다.
+자, 이제 모델 auto_arima 함수로 최적의 모형을 탐색해보겠습니다. 위에서 7:3의 비율로 train과 test 데이터를 나누었습니다.
 train 데이터로 학습을 하고, test 데이터로 예측을 해봅니다.
 
 ```python
@@ -135,7 +134,7 @@ model = pm.auto_arima(y = y_train        # 데이터
                       )
 ```
 
-`auto_arima`에 주요한 옵션들을 설명하면 다음과 같습니다. 
+auto_arima에 주요한 옵션들을 설명하면 다음과 같습니다. 
 더 자세한 설명은 [공식 가이드](https://alkaline-ml.com/pmdarima/modules/generated/pmdarima.arima.auto_arima.html#pmdarima.arima.auto_arima){:target='_blank'}를 참조바랍니다.
 
 * `y`: array 형태의 시계열 자료
@@ -168,7 +167,7 @@ Best model:  ARIMA(0,1,0)(0,0,0)[0]
 Total fit time: 0.349 seconds
 ```
 
-`auto_arima`를 사용한 결과 최적의 모델은 ARIMA (0,1,0) 모형으로 나왔습니다. 
+auto_arima를 사용한 결과 최적의 모델은 ARIMA (0,1,0) 모형으로 나왔습니다. 
 
 이 모형을 풀어 말하면 1차 차분을 했을 때 백색 잡음 ($\epsilon_t \sim N(0,\sigma^2)$)임을 의미하고,
 결국 아래 식처럼 **임의 보행 모형** (Random Walk Model)을 따른다는 것을 알 수 있습니다.
@@ -256,7 +255,7 @@ plt.show()
 
 그래서 어떻게 하냐! 글쎄요... 여기에는 정답은 없습니다.
 저 같으면 일단 넘어가고 예측에 실패하면 다시 모형 설정을 바꿔서 테스트할 것 같습니다. 그래프를 봐도 알 수 있듯이 그렇게 티나게 정규분포를 벗어나는 것 같지 않아서이죠! (주관입니다)
-예측에 실패한다면 위 설명 드린 `auto_arima` 모수인 p,d,q의 max를 늘려볼 수도 있고, train데이터를 더 최근만 가져올 수도 있고, 아니면 분산 안정화를 시도해볼 수도 있습니다.
+예측에 실패한다면 위 설명 드린 auto_arima 모수인 p,d,q의 max를 늘려볼 수도 있고, train데이터를 더 최근만 가져올 수도 있고, 아니면 분산 안정화를 시도해볼 수도 있습니다.
 
 
 ---
