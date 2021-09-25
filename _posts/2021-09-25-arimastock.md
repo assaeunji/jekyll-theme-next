@@ -439,7 +439,7 @@ MAPE는 다음과 같이 "잔차 (F_{t}-A_{t})의 크기가 "실제 값 $A_t$의
 작을수록 좋습니다.
 
 $$
-MAPE = \frac{100\%}{n}\sum_{t=1}^{n}{\frac{|F_{t}-A_{t}|}{|A_{t}|}
+MAPE = \frac{100\%}{n}\sum_{t=1}^{n}{\frac{\vert F_{t}-A_{t}\vert}{\vert A_{t} \vert}
 $$
 
 ```python
