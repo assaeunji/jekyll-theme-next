@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "NDC 후기: 추천알고리즘 Offline A/B 테스트(feat. PAIGE 프로야구 서비스)"
+title: "NDC 후기: 추천알고리즘 Offline A/B 테스트 (feat. PAIGE 프로야구 서비스)"
 date: 2021-12-16
 categories: [Review]
 tag: [ndc, A/B test, review]
@@ -10,7 +10,7 @@ photos:
 ---
 
 
-* 이 글은 [NDC (Nexon Developers Conference)](http://ndcreplay.nexon.com/NDC2019/sessions/NDC2019_0021.html#c=NDC2019&k%5B%5D=A%2FB){:target="_blank"} 홈페이지에서 YouTube 영상을 보고 관심 있던 주제인 A/B 테스트를 현업에서 어떻게 사용하는 지에 대해 정리한 글입니다. 
+* 이 글은 [NDC (Nexon Developers Conference)](https://ndc.nexon.com/main){:target="_blank"} 홈페이지에서 YouTube 영상을 보고 관심 있던 주제인 A/B 테스트를 현업에서 어떻게 사용하는지에 대해 정리한 글입니다. 
 * 다음 방침에 따라 권리자명과 홈페이지를 출처로 밝힘을 알립니다.
 > **NDC 저작권 방침**: 저작물을 개인 블로그, 페이스북 등 SNS에 게재하길 원하시는 경우에는 반드시 권리자명 및 본 홈페이지를 출처로 명시하여야 하고, 해당 저작물을 변형시키지 않는 전제 하에서 게재하실 수 있습니다.
 
