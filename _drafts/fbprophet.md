@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "시계열 분석 시리즈 (2): Prophet 모형 사용"
+title: "Kaggle 필사: Prophet 모형으로 상점 매출 시계열 데이터 분석하기"
 date: 2021-08-08
-categories: [ML]
+categories: [Data Analysis]
 tag: [stationarity, time-series, python, stoc k-prices, data-analysis, pyspark, easy-guide]
 comments: true
 photos:
@@ -10,8 +10,4 @@ photos:
 ---
 
 
-* 이번 포스팅은 Google이 2015년에 발표한 [CausalImpact](https://github.com/google/CausalImpact){:target='_blank'} 
-
-https://google.github.io/CausalImpact/CausalImpact.html
-
-https://towardsdatascience.com/estimating-causal-effects-on-financial-time-series-with-causal-impact-bsts-85d3c403f4a0
+https://www.kaggle.com/elenapetrova/time-series-analysis-and-forecasts-with-prophet
