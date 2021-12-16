@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "NDC 후기: 추천알고리즘 Offline A/B 테스트(feat. PAIGE 프로야구 서비스)"
-date: 2021-12-14
+date: 2021-12-16
 categories: [Review]
 tag: [ndc, A/B test, review]
 comments: true
