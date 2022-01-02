@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 글또 6기를 마치며
-date: 2021-12-31
+date: 2022-01-02
 categories: [Diary]
 tag: [plan, retrospective, geultto]
 comments: true
