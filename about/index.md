@@ -13,7 +13,9 @@ type: about
 
 * Github: [http://github.com/assaeunji](http://github.com/assaeunji)
 * Mail: [assaeunji@gmail.com]()
-* Resume: [Resume](https://drive.google.com/open?id=1Sh3neFtPXLvUoFt-EDWiwseYFwY0XwoN&authuser=assaeunji@korea.ac.kr&usp=drive_fs)
+* 이력서: 
+  * [Notion 링크](https://delightful.notion.site/delightful/Eunji-Lee-74315f1a0de64ce4a3e289b989bb91a2)
+  * [pdf](https://drive.google.com/file/d/1nWX7fTk3JPi0vl5jzvuZFv6YEDnJed2-/view?usp=sharing)
 
 --- 
 
