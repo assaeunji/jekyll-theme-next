@@ -3,7 +3,7 @@ layout: post
 title: 실전! 구매 기록 데이터로 LTV (Lifetime Value) 구해보기
 date: 2022-06-06
 categories: [Data Analysis]
-tag: [metrics, lifetime-value,ltv, probability-distribution]
+tag: [metrics, lifetime-value,ltv, probability-distribution, data-analysis, transaction-data]
 comments: true
 photos:
     - "../../images/ltv-1.png"
@@ -137,14 +137,16 @@ metrics_df.head()
 `summary_data_from_transaction_data`는 raw 형태의 구매 기록 데이터에서 고객별 R, F, M, T를 계산해주는 함수입니다.
 그림에서 각 컬럼에 대한 설명은 다음과 같습니다.
 
-|컬럼명|변수|설명|표기|
-|:---:|:---:|:---:|:---:|
-|frequency|F|고객별 구매 일수|$x$|
-|recency|R|고객별 첫 구매 ~ 마지막 구매까지의 시간 | $t_x - t_0$|
-|T|T|고객별 첫 구매 ~ 집계일까지의 시간 |$t-t_0$|
-|monetary_value|M| 고객별 평균 구매 금액 |$m_x$|
+|컬럼명|변수|설명|
+|:---|:---:|:---|
+|frequency|F|고객별 구매 일수|
+|recency|R|고객별 첫 구매 ~ 마지막 구매까지의 시간 | 
+|T|T|고객별 첫 구매 ~ 집계일까지의 시간 |
+|monetary_value|M| 고객별 평균 구매 금액 |
 
-수동으로 한 고객의 RFMT를 구해봅시다.
+### RFMT 손계산하기
+
+RFMT가 구체적으로 어떻게 계산되는지 확인하기 위해 한 고객의 RFMT를 구해봅시다.
 `CustomerID` = 12347인 고객의 RFMT는 다음과 같습니다.
 
 ```python
@@ -154,9 +156,13 @@ metrics_df[metrics_df.index==12347]
 
 ![](../../images/ltvpractice-4.png)
 
-즉, 총 6번 구매했고 (frequency), 마지막 구매일 - 첫 구매일은 365일 (recency), 집계일 - 첫 구매일은 367일 (T)이며, 평균 구매 금액은 £600 정도 (monetary_value)임을 의미합니다.
+즉, 
+* 총 6번 구매했고 (frequency), 
+* 마지막 구매일 - 첫 구매일은 365일 (recency), 
+* 집계일 - 첫 구매일은 367일 (T)이며, 
+* 평균 구매 금액은 £600 정도 (monetary_value)임을 의미합니다.
 
-이를 수동 계산해보겠습니다. 먼저 `CustomerID` = 12347인 유저 데이터는 아래와 같습니다.
+이를 손계산해보겠습니다. 먼저 `CustomerID` = 12347인 유저 데이터는 아래와 같습니다.
 
 ```python
 ## 수동 계산해보기!
@@ -211,8 +217,8 @@ model = BetaGeoFitter(penalizer_coef=l2_reg)
 model = GammaGammaFitter(penalizer_coef=l2_reg)
 ```
 
-[lifetimes 공식 홈페이지](https://lifetimes.readthedocs.io/en/latest/Quickstart.html){:target='_blank'}에서는 데이터 크기가 작으면 추정된 파라미터들이 과도하게 추정될 수 있어서 가능도에 l2 penalty를 부여한다고 말합니다
-. 이 l2 penalty는 0.001 ~ 0.1 사이로 넣어야 효과적이라 하네요!
+[lifetimes 공식 홈페이지](https://lifetimes.readthedocs.io/en/latest/Quickstart.html){:target='_blank'}에서는 데이터 크기가 작으면 추정된 파라미터들이 과도하게 추정될 수 있어서 가능도에 L2 penalty를 부여할 수 있다고 말합니다. 
+이 L2 penalty는 0.001 ~ 0.1 사이로 넣어야 효과적이라 하네요!
 L2 penalty에 대한 원론적인 설명은 [Ridge/Lasso Regression](https://assaeunji.github.io/machine%20learning/2020-02-12-ridge/){:target='_blank'} 포스팅을 참조해주세요!
 
 
@@ -224,9 +230,9 @@ L2 penalty에 대한 원론적인 설명은 [Ridge/Lasso Regression](https://ass
 > lifetimes.utils 모듈의 `calibration_and_holdout_data` 함수
 
 어떤 L2 penalty가 "최적"인지 알려면 적당하게 데이터를 나눠 훈련시키고 테스트하는 과정이 필요하겠죠?
-lifetimes 패키지에서는 훈련 데이터를 calibration data / 테스트 데이터를 holdout data라 부릅니다. 
+lifetimes 패키지에서는 훈련 데이터를 **calibration data** / 테스트 데이터를 **holdout data**라 부릅니다. 
 
-굳이 train / test 데이터라 부르지 않는 이유는 train/test 데이터는 랜덤하게 60%, 40% 비율로 나눈다면, 
+굳이 train / test 데이터라 부르지 않는 이유는 train/test 데이터는 랜덤하게 일정 비율로 나눈다면, 
 시계열 데이터는 랜덤하게 나누지 않고 특정 시점의 전과 후로 나누기 때문에 용어를 따로 쓰는 게 아닌가 생각이 들었습니다.
 
 그럼 어느 시점을 전후로 calibration과 holdout으로 나눌 것이냐? 에 대해선 정해진게 없네요. 
@@ -236,7 +242,7 @@ lifetimes 패키지에서는 훈련 데이터를 calibration data / 테스트 �
 우선 저희는 데이터 크기가 거의 1년이기 때문에 마지막 세 달 (90일)을 기준으로 데이터를 나눠보겠습니다.
 
 `calibration_and_holdout_data` 인자는 아까 `summary_data_from_transaction_data`와 거의 비슷한데 `calibration_period_end`만 추가되었습니다.
-이 인자에는 calibration data가 끝나는 시점 (90일 이전 날짜)로 적어주면 됩니다.
+이 인자에는 calibration data가 끝나는 시점 (90일 이전 날짜)인 `calibration_end_date`로 적어주면 됩니다.
 
 ```python
 holdout_days = 90
@@ -509,7 +515,6 @@ print('MSE: {0}'.format(mse))
 히스토그램을 통해 실제와 예측된 평균 구매 금액이 어떻게 차이가 나는지 확인해봅시다.
 
 ```python
-
 bins = 100
 plt.figure(figsize=(15, 5))
 
@@ -551,7 +556,9 @@ penalized_coef=0으로 두었을 땐 파란 막대와 주황 막대의 분포가
 
 ---
 ## LTV 구하기
-> `customer_lifetime_value` 함수 / `conditional_expected_number_of_purchases_up_to_time` 함수 / `conditional_expected_average_profit` 함수
+> `customer_lifetime_value` 함수 
+> `conditional_expected_number_of_purchases_up_to_time` 함수 
+> `conditional_expected_average_profit` 함수
 
 우여곡절 끝에 이제 LTV를 구할 준비는 끝났습니다. 지금까지는
 * 고객별 RFMT를 구하였고
@@ -639,7 +646,7 @@ python의 `lifetimes` 패키지를 이용해 고객의 구매 기록 데이터�
 함수들의 쓰임을 요약하며 이 글을 마칩니다!
 
 |함수명|용도|
-|:---:|:---|
+|:---|:---|
 |summary_data_from_transaction_data|구매기록 데이터에서 고객별 RFMT 계산|
 |calibration_and_holdout_data| 훈련 / 테스트를 나눠 고객별 RFMT 계산|
 |fmin|L2 penalty 최적화|
