@@ -11,6 +11,8 @@ photos:
 
 * 이번 포스팅은 지난 [LTV (Life Time Value) 지표 속 BG/NBD 모델과 Gamma-Gamma 모델 파헤치기](https://assaeunji.github.io/statistics/2022-04-15-ltv/){:target='_blank'}에 이어 실제 데이터를 통해 LTV를 계산해보는 포스팅입니다.
 * 참조한 데이터는 UCI Machine Learning Repository 의 [Online Retail Dataset](http://archive.ics.uci.edu/ml/datasets/Online+Retail){:target='_blank'}이며, [databricks LTV 분석 자료](https://databricks.com/notebooks/clv_part2_estimating_future_spend.html){:target='_blank'}를 주로 참조하였습니다.
+* 전체 코드는 [이 곳](https://github.com/assaeunji/ltv-onlineretail-analysis/blob/main/Lifetime_onlineretail.ipynb){:target='_blank'}에서 확인하실 수 있습니다.
+
 
 ---
 ## 세 줄 요약
