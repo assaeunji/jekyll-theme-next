@@ -10,7 +10,7 @@ photos:
 ---
 
 * 이번 포스팅은 지난 [LTV (Life Time Value) 지표 속 BG/NBD 모델과 Gamma-Gamma 모델 파헤치기](https://assaeunji.github.io/statistics/2022-04-15-ltv/){:target='_blank'}에 이어 실제 데이터를 통해 LTV를 계산해보는 포스팅입니다.
-* 참조한 데이터는 UCI Machine Learning Repository 의 [Online Retail Dataset](http://archive.ics.uci.edu/ml/datasets/Online+Retail){:target='_blank'}이며, [`[link]`](https://databricks.com/notebooks/clv_part2_estimating_future_spend.html){:target='_blank'}를 주로 참조하였습니다.
+* 참조한 데이터는 UCI Machine Learning Repository 의 [Online Retail Dataset](http://archive.ics.uci.edu/ml/datasets/Online+Retail){:target='_blank'}이며, [databricks LTV 분석 자료](https://databricks.com/notebooks/clv_part2_estimating_future_spend.html){:target='_blank'}를 주로 참조하였습니다.
 
 --
 ## 세 줄 요약
@@ -115,7 +115,7 @@ df.head()
 ---
 ## lifetimes 패키지로 RFMT 계산하기
 
-> lifetimes.utils 모듈의 summary_data_from_transaction_data 함수
+> lifetimes.utils 모듈의 `summary_data_from_transaction_data` 함수
 
 이제 다음에 할 일은 BG/NBD 모형과 Gamma-Gamma 모형의 INPUT이 되는 R, F, M, T를 만드는 일입니다.
 
@@ -203,6 +203,7 @@ F와 M을 계산할 때 첫 구매일을 제외하는 이유는 "반복되는 �
 ## 최적의 L2 penalty 파라미터 찾기
 
 이제 고객 각각의 RFMT를 계산했으니 이 데이터를 BG/NBD 모형과 Gamma-Gamma 모형의 INPUT으로 넣어주면 됩니다.
+
 그런데 모형을 적합시킬 때 다음과 같이 `penalizer_coef` 인자에 **L2 penalty**를 넣어준다면 모형을 좀 더 강건하게 만들어줄 수 있습니다.
 
 ```python
@@ -212,15 +213,15 @@ model = GammaGammaFitter(penalizer_coef=l2_reg)
 
 [lifetimes 공식 홈페이지](https://lifetimes.readthedocs.io/en/latest/Quickstart.html){:target='_blank'}에서는 데이터 크기가 작으면 추정된 파라미터들이 과도하게 추정될 수 있어서 가능도에 l2 penalty를 부여한다고 말합니다
 . 이 l2 penalty는 0.001 ~ 0.1 사이로 넣어야 효과적이라 하네요!
-L2 penalty에 대한 원론적인 설명은 [`Ridge/Lasso Regression`](https://assaeunji.github.io/machine%20learning/2020-02-12-ridge/){:target='_blank'} 포스팅을 참조해주세요!
+L2 penalty에 대한 원론적인 설명은 [Ridge/Lasso Regression](https://assaeunji.github.io/machine%20learning/2020-02-12-ridge/){:target='_blank'} 포스팅을 참조해주세요!
 
 
 어쨌든 다시 본론으로 돌아와서 L2 penalty의 계수를 어떻게 넣어줘야 최적인지 파라미터를 찾는 과정이 필요합니다.
-이를 위해 [`[link]`](https://databricks.com/notebooks/clv_part2_estimating_future_spend.html){:target='_blank'}에선 `hyperopt` 모듈을 이용해 베이지안 하이퍼파라미터 튜닝을 진행하였습니다.
+이를 위해 [databricks LTV 분석 자료](https://databricks.com/notebooks/clv_part2_estimating_future_spend.html){:target='_blank'}에선 `hyperopt` 모듈을 이용해 베이지안 하이퍼파라미터 튜닝을 진행하였습니다.
 
 ### 훈련 / 테스트 데이터 나누기
 
-> lifetimes.utils 모듈의 calibration_and_holdout_data 함수
+> lifetimes.utils 모듈의 `calibration_and_holdout_data` 함수
 
 어떤 L2 penalty가 "최적"인지 알려면 적당하게 데이터를 나눠 훈련시키고 테스트하는 과정이 필요하겠죠?
 lifetimes 패키지에서는 훈련 데이터를 calibration data / 테스트 데이터를 holdout data라 부릅니다. 
@@ -229,10 +230,12 @@ lifetimes 패키지에서는 훈련 데이터를 calibration data / 테스트 �
 시계열 데이터는 랜덤하게 나누지 않고 특정 시점의 전과 후로 나누기 때문에 용어를 따로 쓰는 게 아닌가 생각이 들었습니다.
 
 그럼 어느 시점을 전후로 calibration과 holdout으로 나눌 것이냐? 에 대해선 정해진게 없네요. 
-[`[link]`](https://databricks.com/notebooks/clv_part2_estimating_future_spend.html){:target='_blank'} 에서는 마지막 90일 동안을 holdout data로 두고 있고
+[databricks LTV 분석 자료](https://databricks.com/notebooks/clv_part2_estimating_future_spend.html){:target='_blank'} 에서는 마지막 90일 동안을 holdout data로 두고 있고
 어디선 2:1로 나눴다는 것도 봤습니다.
 
 우선 저희는 데이터 크기가 거의 1년이기 때문에 마지막 세 달 (90일)을 기준으로 데이터를 나눠보겠습니다.
+`calibration_and_holdout_data` 인자는 아까 `summary_data_from_transaction_data`와 거의 비슷한데 `calibration_period_end`만 추가되었습니다.
+이 인자에는 calibration data가 끝나는 시점 (90일 이전 날짜)로 적어주면 됩니다.
 
 ```python
 holdout_days = 90
@@ -248,14 +251,11 @@ metrics_cal_df = calibration_and_holdout_data(df
 metrics_cal_df.head()
 ```
 
-아까 `summary_data_from_transaction_data`와 인자가 거의 비슷한데 `calibration_period_end`만 추가되었습니다.
-이 인자에는 calibration data가 끝나는 시점 (90일 이전 날짜)로 적어주면 됩니다.
-
+또한 `summary_data_from_transaction_data` 결과와 달리 RFMT에 `_cal`과 `_holdout`이 붙었는데요.
 
 ![](../../images/ltvpractice-6.png)
 
-또한 `summary_data_from_transaction_data` 결과와 달라진 점은 RFMT에 `_cal`과 `_holdout`이 붙었다는 점입니다.
-* calibration 기간 동안의 RFMT를 계산하였고, holdout 기간 동안의 F와 M을 계산하였습니다.
+* calibration 기간 동안의 RFMT를 계산한 값은 `_cal`이 붙고, holdout 기간 동안의 F와 M을 계산한 값은 `_holdout`이 붙습니다.
 * `duration_holdout`은 holdout data이 며칠인지 나타내는 컬럼입니다.
 
 ### 최종 데이터 만들기
@@ -263,8 +263,9 @@ metrics_cal_df.head()
 > 고객별 RFMT가 들어간 데이터에서 frequency가 1 이상인 데이터만 가져오기!
 
 이렇게 하면 BG/NBD 모형과 Gamma-Gamma 모형의 INPUT을 정리할 수 있습니다.
+
 아래 코드에서 보면 frequency가 0인 것은 제외하고 가져오는데, 이 고객들은 전체 기간 동안 구매 일수가 1일인 유저입니다. (frequency는 총 구매일수 - 1)
-이들은 "반복적인" 구매를 한 고객들이 아니라서 BG/NBD 모형 가정에서 벗어난 고객들이기 때문에 제외하고 적합해야 합니다.
+이들은 **"반복적인" 구매를 한 고객들이 아니라서 BG/NBD 모형 가정에서 벗어난 고객들이기 때문에** 제외하고 적합해야 합니다.
 
 ```python
 ## frequency가 0인 것은 제외하기
@@ -272,13 +273,13 @@ whole_filtered_df = metrics_df[metrics_df.frequency > 0]
 filtered_df       = metrics_cal_df[metrics_cal_df.frequency_cal > 0]
 ```
 
-* `whole_filtered_df`는 L2 페널티를 최적화한 후에 제일 마지막에 LTV를 계산할 때 쓸 데이터이고 (calibration/holdout을 나누지 않은 데이터)
-* `filtered_df`는 L2 페널티를 최적화하기 위해 calibration/holdout을 나눈 데이터입니다.
+* `whole_filtered_df`는 L2 페널티를 최적화한 후에 제일 마지막에 LTV를 계산할 때 쓸 데이터이고 (calibration / holdout을 나누지 않은 데이터)
+* `filtered_df`는 L2 페널티를 최적화하기 위해 calibration / holdout을 나눈 데이터입니다.
 
 
 ### L2 페널티 최적화하기
 
-> hyperopt 모듈의 fmin 함수
+> hyperopt 모듈의 `fmin` 함수
 
 자, 이제 훈련과 테스트 데이터를 나눴으니 L2 페널티를 최적화할 차례입니다. 이를 위해 세 가지 함수를 정의합니다.
 
