@@ -12,13 +12,13 @@ photos:
 * 이번 포스팅은 지난 [LTV (Life Time Value) 지표 속 BG/NBD 모델과 Gamma-Gamma 모델 파헤치기](https://assaeunji.github.io/statistics/2022-04-15-ltv/){:target='_blank'}에 이어 실제 데이터를 통해 LTV를 계산해보는 포스팅입니다.
 * 참조한 데이터는 UCI Machine Learning Repository 의 [Online Retail Dataset](http://archive.ics.uci.edu/ml/datasets/Online+Retail){:target='_blank'}이며, [databricks LTV 분석 자료](https://databricks.com/notebooks/clv_part2_estimating_future_spend.html){:target='_blank'}를 주로 참조하였습니다.
 
---
+---
 ## 세 줄 요약
 
 본격적으로 데이터 분석을 하기 전에 LTV가 무엇이고 어떻게 계산하는지 세 줄로 말씀드리겠습니다.
 1. LTV는 고객이 평생동안 기업에게 어느 정도의 금전적 가치를 가져다 주는지를 정량화한 지표로, **고객별 미래의 예상 구매 횟수 * 예상 평균 수익**으로 계산됩니다.
-2. 미래의 예상 구매 횟수는 BG/NBD 모형을 통해 산출되며, 이를 위해 R (Recency), F (Frequency), T (Time) 정보가 필요합니다. 
-3. 미래의 예상 평균 수익은 Gamma-Gamma 모형을 통해 산출되며, 이를 위해 F (Frequency), M (Monetary Value) 정보가 필요합니다.
+2. **미래의 예상 구매 횟수**는 BG/NBD 모형을 통해 산출되며, 이를 위해 R (Recency), F (Frequency), T (Time) 정보가 필요합니다. 
+3. **미래의 예상 평균 수익**은 Gamma-Gamma 모형을 통해 산출되며, 이를 위해 F (Frequency), M (Monetary Value) 정보가 필요합니다.
 
 
 그래서 저희는 구매 기록 데이터의 R, F, M, T를 구해 BG/NBD 모형과 Gamma-Gamma 모형을 각각 적합해 LTV를 구할 것입니다.
@@ -135,7 +135,7 @@ metrics_df.head()
 ![](../../images/ltvpractice-3.png)
 
 `summary_data_from_transaction_data`는 raw 형태의 구매 기록 데이터에서 고객별 R, F, M, T를 계산해주는 함수입니다.
-그림에서, 각 컬럼은 다음과 같습니다.
+그림에서 각 컬럼에 대한 설명은 다음과 같습니다.
 
 |컬럼명|변수|설명|표기|
 |:---:|:---:|:---:|:---:|
@@ -234,6 +234,7 @@ lifetimes 패키지에서는 훈련 데이터를 calibration data / 테스트 �
 어디선 2:1로 나눴다는 것도 봤습니다.
 
 우선 저희는 데이터 크기가 거의 1년이기 때문에 마지막 세 달 (90일)을 기준으로 데이터를 나눠보겠습니다.
+
 `calibration_and_holdout_data` 인자는 아까 `summary_data_from_transaction_data`와 거의 비슷한데 `calibration_period_end`만 추가되었습니다.
 이 인자에는 calibration data가 끝나는 시점 (90일 이전 날짜)로 적어주면 됩니다.
 
@@ -284,8 +285,8 @@ filtered_df       = metrics_cal_df[metrics_cal_df.frequency_cal > 0]
 자, 이제 훈련과 테스트 데이터를 나눴으니 L2 페널티를 최적화할 차례입니다. 이를 위해 세 가지 함수를 정의합니다.
 
 * `score_model`: 실제값과 예측값의 차이에 대한 지표 (MSE / RMSE/ MAE)를 계산하는 함수
-* `evaluate_bgnbd_model`: calibration data와 l2_reg를 넣어 BG/NBD 모형을 적합시키고, holdout data의 구매 일수 (frequency)에 대한 실제값과 예측값에 대한 MSE를 계산하는 함수
-* `evaluate_gg_model`: calibration data와 l2_reg를 넣어 Gamma-Gamma 모형을 적합시키고, holdout data의 평균 구매 금액 (monetary value)에 대한 실제값과 예측값에 대한 MSE를 계산하는 함수
+* `evaluate_bgnbd_model`: calibration data와 l2_reg를 넣어 **BG/NBD 모형**을 적합시키고, holdout data의 구매 일수 (frequency)에 대한 실제값과 예측값에 대한 MSE를 계산하는 함수
+* `evaluate_gg_model`: calibration data와 l2_reg를 넣어 **Gamma-Gamma 모형**을 적합시키고, holdout data의 평균 구매 금액 (monetary value)에 대한 실제값과 예측값에 대한 MSE를 계산하는 함수
 
 
 ```python
@@ -402,7 +403,7 @@ print(l2_gg)
 
 ### BG/NBD 모형 적합
 
-> BetaGeoFitter (penalizer_coef) 및 fit / predict 함수 이용 
+> `BetaGeoFitter (penalizer_coef)` 및 `predict` 함수
 
 BG/NBD 모형은 고객별 미래의 구매 횟수를 예측하기 위한 모형입니다.
 이를 위해 아래처럼 
@@ -445,10 +446,11 @@ r, alpha, a, b 모수가 나오는데요. [지난 포스팅](https://assaeunji.g
 4. 고객마다 더 이상 구매를 하지 않을 확률 (이탈률)은 다릅니다. 이탈률 p는 p ~ Beta (a,b)를 따릅니다.
 5. 고객별 일정 기간 동안의 구매 횟수와 구매를 하지 않을 확률은 서로 영향을 주지 않습니다. 
 
-여기서 2번에 해당하는 alpha, r, 4번에 해당하는 a, b가 `lifetimes_model`에서 추정되는 파라미터인 것입니다.
+**여기서 2번에 해당하는 Gamma(r, $\alpha$)와 4번에 해당하는 Beta(a, b)가 `lifetimes_model`에서 추정되는 파라미터인 것입니다.**
 
-이를 활용해 고객마다 일정한 기간 동안 구매하는 횟수의 분포와 고객별 더 이상 구매하지 않을 확률의 분포도 그릴 수 있겠네요!
-먼저 고객마다 일정한 기간 동안 구매하는 횟수 $\lambda$는 Gamma(r,alpha)을 따릅니다.
+이를 활용해 **고객마다 일정한 기간 동안 구매하는 횟수의 분포**와 **고객별 더 이상 구매하지 않을 확률의 분포**도 그릴 수 있겠네요!
+
+먼저, 고객마다 일정한 기간 동안 구매하는 횟수 $\lambda$는 Gamma(r,alpha)을 따릅니다.
 
 ```python
 # 고객별 lambda (구매율) 의 분포
@@ -465,20 +467,21 @@ plt.plot(x, y)
 ![](../../images/ltvpractice-8.png)
 
 여기서 T 기간동안의 평균 구매 횟수가 $\lambda T$ 이므로 $\lambda$에 대한 분포는 1일 단위입니다. 
+
 위 그림에서 0.2쯤부터 확률이 0으로 수렴하고 있는데 대부분 고객들이 1일의 평균 구매 횟수는 최대 0.2 정도임을 의미합니다.
 즉, 최대 5일에 한 번 꼴로 구매한다라 볼 수도 있겠죠!
 
-고객이 더 이상 구매를 하지 않을 확률은 Beta(a,b)를 따릅니다.
+두 번째로, 고객이 더 이상 구매를 하지 않을 확률은 Beta(a,b)를 따릅니다.
 
 ![](../../images/ltvpractice-9.png)
 
-분포가 0과 1 근처로 양극단에 위치한 것을 볼 수 있습니다. 즉 더 이상 구매를 하지 않을 확률이 0인 active한 유저도 많고 / 
+분포가 0과 1 근처로 양극단에 위치한 것을 볼 수 있습니다. 즉 더 이상 구매를 하지 않을 확률이 0인 active한 유저도 많고, 
 확률이 1 근처인 inactive한 유저도 많음을 알 수 있습니다.
 
 
 ### Gamma-Gamma 모형 적합
 
-> GammaGammaFitter (penalizer_coef)
+> `GammaGammaFitter (penalizer_coef)`와 `conditional_expected_average_profit` 함수
 
 각설하고 이제 "평균 구매 금액"을 모델링하기 위한 Gamma-Gamma 모형을 적합해봅시다.
 
@@ -518,6 +521,7 @@ plt.legend(loc='upper right')
 ![](../../images/ltvpractice-10.png)
 
 파란 막대가 실제값, 주황 투명 막대가 예측값입니다. 어느 정도 분포가 비슷함을 볼 수 있죠.
+
 만약 penalizer_coef를 주지 않고 예측할 경우 어떨까요?
 
 ```python
@@ -547,7 +551,7 @@ penalized_coef=0으로 두었을 땐 파란 막대와 주황 막대의 분포가
 
 ---
 ## LTV 구하기
-> customer_lifetime_value / conditional_expected_number_of_purchases_up_to_time / conditional_expected_average_profit 함수
+> `customer_lifetime_value` 함수 / `conditional_expected_number_of_purchases_up_to_time` 함수 / `conditional_expected_average_profit` 함수
 
 우여곡절 끝에 이제 LTV를 구할 준비는 끝났습니다. 지금까지는
 * 고객별 RFMT를 구하였고
@@ -574,11 +578,10 @@ final_df['ltv'] = spend_model.customer_lifetime_value(lifetimes_model,
 ```
 
 * 여기서 왜 `filtered_df` 대신 `whole_filtered_df`를 쓰냐면, calibration/holdout로 나뉘어진 데이터가 아닌 전체 데이터를 대상으로 LTV를 구해야하기 때문이며
-* `time`과 `discount_rate`는 향후 몇 개월동안의 LTV를 볼 것인지 (time = 12개월), 어느 정도의 할인율을 적용할 것인지 (discount_rate=0.01) 정하는 인자입니다.
+* `time`과 `discount_rate`는 향후 몇 개월동안의 LTV를 볼 것인지 (time = 12개월), 어느 정도의 할인율을 적용할 것인지 (discount_rate=0.01) 정하는 인자입니다. 
+예를 들어 `discount_rate`=0.01이면 (1.01)^12 = 1.127 = 1+ 0.127 = 12.7% 만큼 ltv가 할인 (감소)하도록 계산해주는 것 같습니다.
 
-discount_rate=0.01이면 (1.01)^12 = 1.127 = 1+ 0.127 = 12.7% 만큼 ltv가 할인 (감소)하도록 계산해주는 것 같습니다.
-
-또한 BG/NBD 모형의 OUTPUT인 정해진 기간만큼의 예상 구매 횟수도 구할 수 있습니다.
+또한 BG/NBD 모형의 OUTPUT인 정해진 기간만큼의 **예상 구매 횟수**도 구할 수 있습니다.
 365일 동안의 예상 구매 횟수를 구하려면 다음과 같습니다.
 
 ```python
@@ -590,7 +593,7 @@ final_df['predicted_purchases'] = lifetimes_model.conditional_expected_number_of
 
 ```
 
-마지막으로 Gamma-Gamma 모형의 OUTPUT의 예상 평균 구매 금액은 다음과 같이 구할 수 있습니다.
+마지막으로 Gamma-Gamma 모형의 OUTPUT인 **예상 평균 구매 금액**은 다음과 같이 구할 수 있습니다.
 
 ```python
 final_df['predicted_monetary_value'] = spend_model.conditional_expected_average_profit(final_df['frequency']
@@ -613,7 +616,7 @@ final_df.sort_values(by="ltv").tail(5)
 
 * 이 분의 평균 구매 금액 (monetary_value)은 £6,367 정도로 한 번에 1천만 원 쓰시는 분이구요.
 * 354일 동안 44번 구매했습니다. (평균 8일에 한 번 꼴)
-* 어제도 구매하셨네요. (T-recency = 집게일 - 마지막 구매 일자가 1이므로)
+* 어제도 구매하셨네요. (T-recency = 집계일 - 마지막 구매 일자가 1이므로)
 
 LTV 모형을 고려하지 않고 계산하면 다음 해에도 **1천만 원씩 * 44번 = 4.4억** 정도 구매할 거라 예상하겠죠?
 
@@ -626,6 +629,24 @@ LTV 모형을 고려하지 않고 계산하면 다음 해에도 **1천만 원씩
 이처럼 과거의 구매 기록 데이터를 바탕으로 어느 정도 감소된 (=더 타당한) 값을 도출해냈습니다.
 
 
+---
+## 마치며
 
+python의 `lifetimes` 패키지를 이용해 고객의 구매 기록 데이터를 통해 LTV를 계산해보았습니다.
+개인적으로 `lifetimes` 함수명이 너무 길어서 이해하기 좀 어렵고, 가이드 문서도 많지 않아 적용하는데 어려움을 겪었었는데요.
+이 글을 읽으신 분들은 그나마 한글로 된 LTV 자료를 겟또하시는 바람으로, 그리고 저도 정리된 문서를 가질 목적으로 글을 정리했습니다.
+
+함수들의 쓰임을 요약하며 이 글을 마칩니다!
+
+|함수명|용도|
+|:---:|:---|
+|summary_data_from_transaction_data|구매기록 데이터에서 고객별 RFMT 계산|
+|calibration_and_holdout_data| 훈련 / 테스트를 나눠 고객별 RFMT 계산|
+|fmin|L2 penalty 최적화|
+|BetaGeoFitter|예상 구매 일수를 구하기 위한 BG/NBD 모형 적함|
+|conditional_expected_number_of_purchases_up_to_time|t 시점까지의 예상 구매 횟수 계산|
+|GammaGammaFitter|예상 평균 구매 금액을 구하기 위한 Gamma-Gamma 모형 적합|
+|conditional_expected_average_profit|예상 평균 구매 금액 계산|
+|customer_lifetime_value|고객별 LTV 계산|
 
 
