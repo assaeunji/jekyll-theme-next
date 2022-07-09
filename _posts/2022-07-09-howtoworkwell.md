@@ -260,7 +260,7 @@ ACAC → BCBC 순으로 업무를 진행한다면 효율적으로 진행할 수 
 아! 그리고 또 하나의 목적은 언젠가 제 최애 프로그램 유퀴즈에 나와보는 것인데요.
 물론 섭외가 오려면 훨씬 더 대단한 사람이여야겠지만 이런 라떼 시리즈를 잘 엮는다면 가능성이 0%는 아니지 않을까요?
 
-유명한 라떼 시리즈로 아래 링크들도 추천하며 이 글을 마칩니다.
+유명한 라떼 시리즈로 아래 링크들도 추천하며 이 글을 마칩니다. (라떼가 부정적인 어감일수도 있지만 저는 마음 건강에 많은 도움이 되었던 글입니다. 강추!)
 * [김은주, 생각이 너무 많은 서른 살에게](http://www.kyobobook.co.kr/product/detailViewKor.laf?ejkGb=KOR&mallGb=KOR&barcode=9791190538329)
 * [김충효, 10년째 같은 회사를 다니고 있습니다](https://www.slideshare.net/devcatpublications/10-6677129)
 * [김동건, 갈망의 아궁이](https://www.slideshare.net/devcatpublications/ss-6097436)
