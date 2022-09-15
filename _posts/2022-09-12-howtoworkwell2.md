@@ -6,7 +6,7 @@ categories: [Tips]
 tag: [honeytip, latte-series, how-to-work-well]
 comments: true
 photos:
-    - "../../images/honeytip-title.png"
+    - "../../images/latte-1.jpeg"
 ---
 
 * 이번엔 [라떼 시리즈 (1): 회사에서 꽤나 괜찮은 주니어가 되려면](https://assaeunji.github.io/diary/2022-07-09-howtoworkwell/) 에 이어 더 구체적인 라떼로 돌아왔습니다. 
