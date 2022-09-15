@@ -2,7 +2,7 @@
 layout: post
 title: "라떼 시리즈 (1): 회사에서 꽤나 괜찮은 주니어가 되려면"
 date: 2022-07-09
-categories: [Diary]
+categories: [Tips]
 tag: [honeytip, latte-series, how-to-work-well]
 comments: true
 photos:

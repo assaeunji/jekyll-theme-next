@@ -2,7 +2,7 @@
 layout: post
 title: 데이터 분석가로 취업을 하려면 다섯 가지를 준비하자.
 date: 2021-10-24
-categories: [ETC]
+categories: [Tips]
 tag: [how-to-be-data-analyst,honeytip, diary]
 comments: true
 photos:
